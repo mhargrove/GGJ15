@@ -6,7 +6,6 @@ public class SocketListener extends Thread{
 	private ArrayList<Socket> clients;
 	private boolean newClients;
 	private ServerSocket acceptor;
-	private boolean clientListLocked = false;
 
 	public SocketListener(ServerSocket s){
 		this.acceptor = s;
@@ -18,8 +17,8 @@ public class SocketListener extends Thread{
 		boolean threadRunning = true;
 		while(threadRunning){
 			try{
-				clients.add(acceptor.accept()); //runs until someone connects
-				clientListLocked = false;
+				Socket temp = acceptor.accept(); //runs until someone connects
+				clients.add(temp); 
 				newClients = true;
 				System.out.println("New connection.");
 			}
@@ -27,10 +26,6 @@ public class SocketListener extends Thread{
 				ioe.printStackTrace();
 			}
 		}
-	}
-
-	public boolean clientListLocked(){
-		return clientListLocked;
 	}
 
 	public boolean newClients(){

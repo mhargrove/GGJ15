@@ -37,4 +37,6 @@ public class VoteHandler{
 		ballotBox = new HashMap<Socket, Action>();
 		return Action.NONE;
 	}
+
+	public int votesSumbmitted(){return ballotBox.size();}
 }

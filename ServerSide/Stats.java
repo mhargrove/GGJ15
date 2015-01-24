@@ -8,11 +8,11 @@ public class Stats{
 	public int study;
 
 	public Stats(){
-		health  = 0;
+		health  = MAXVALUE;
 		sleepy  = 0;
-		social  = 0;
-		food    = 0;
-		romance = 0;
+		social  = MAXVALUE / 2;
+		food    = MAXVALUE / 2;
+		romance = MAXVALUE / 2;
 		study   = 0;
 	}
 }

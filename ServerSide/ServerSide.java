@@ -14,6 +14,7 @@ public class ServerSide{
 	static ArrayList<Socket> clients;
 
 	//Gameplay vars
+	static final long VOTEWAITTIME = 5000; // in millis
 	static VoteHandler ballot;
 	static int PlayerY;
 	static int PlayerX;
@@ -22,14 +23,43 @@ public class ServerSide{
 	static ArrayList<Item> items;
 
 	//Other
-	static final boolean DEBUG = true;
+	static final boolean DEBUG = false;
 
 	public static void main(String[] args){
 		System.out.println("----------Server started----------");
 		init();
 		boolean running = true;
+		int ticks;
+		long loopStartTime = System.currentTimeMillis();
 		while(running){
-			tick();
+			//update new users
+			if(socketWhisperer.newClients()){
+				if(DEBUG){
+					System.out.println("adding new client");
+				}
+				clients = socketWhisperer.getClients();
+			}
+
+			readUsers();
+			printStats();
+
+			if(System.currentTimeMillis() - loopStartTime > VOTEWAITTIME){
+				updateGame(); //handles votes and movement
+				updateUsers(); //Sends out the results
+				loopStartTime = System.currentTimeMillis();
+			}
+			else{
+				if(DEBUG){
+					System.out.println("Not yet. Time: " + (System.currentTimeMillis() - loopStartTime));
+				}
+			}
+			//wait a bit to break up the loop
+			try {
+    			Thread.sleep(100);
+			} 
+			catch(InterruptedException ex) {
+    			Thread.currentThread().interrupt();
+			}
 		}
 	}
 
@@ -57,24 +87,35 @@ public class ServerSide{
 			ioe.printStackTrace();
 		}
 	}
-	public static void tick(){
-		//update new users
-		if(socketWhisperer.newClients()){
-			if(DEBUG){
-				System.out.println("adding new client");
-			}
-			clients = socketWhisperer.getClients();
-		}
-		readUsers();
-		//Check time left on voting
-		//act on that
-	}
-	public static void updateGame(){}
-	public static void updateUsers(){
 
+	public static void printStats(){
+		System.out.print("\r");
+		System.out.print("Users: " + clients.size() + " votes: " + ballot.votesSumbmitted());
+	}
+
+	public static void updateGame(){
+		switch(ballot.getResults()){
+			case UP: PlayerY++; break;
+			case DOWN: PlayerY--; break;
+			case LEFT: PlayerX++; break;
+			case RIGHT: PlayerX--; break;
+			case NONE: break;
+		}
+	}
+	public static void updateUsers(){
+		String data = getMessage();
+		for(Socket s : clients){
+			updateUser(s, data);
+		}
 	}
 	public static void updateUser(Socket s, String msg){
-
+		try{
+			PrintWriter toUser = new PrintWriter(s.getOutputStream(), true);
+			toUser.println(msg);
+		}
+		catch(IOException ioe){
+			ioe.printStackTrace();
+		}
 	}
 	public static void updateUser(Socket s){
 		String data = getMessage();
@@ -84,24 +125,26 @@ public class ServerSide{
 		BufferedReader inbox;
 		for(Socket user : clients){
 			try{
+				if(DEBUG){
+					System.out.println("Reading user " + user.toString());
+				}
 				inbox = new BufferedReader(new InputStreamReader(user.getInputStream()));
 				if(inbox.ready()){
-					String msg = "" + (char)inbox.read();
-					
+					char msg = (char)inbox.read();					
 					//parse the message
-					if(msg.equals("S")){
+					if(msg == 'S'){
 						updateUser(user);
 					}
-					else if(msg.equals("U")){
+					else if(msg == 'U'){
 						ballot.voteUp(user);
 					}
-					else if(msg.equals("D")){
+					else if(msg == 'D'){
 						ballot.voteDown(user);
 					}
-					else if(msg.equals("L")){
+					else if(msg == 'L'){
 						ballot.voteLeft(user);
 					}
-					else if(msg.equals("R")){
+					else if(msg == 'R'){
 						ballot.voteRight(user);
 					}
 					else{
