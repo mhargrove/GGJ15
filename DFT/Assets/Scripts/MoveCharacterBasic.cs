@@ -4,29 +4,37 @@ using System.Collections;
 
 public class MoveCharacterBasic : MonoBehaviour 
 {
-	IEnumerator leftFade() {
-		for (float f = 32f; f >= 0; f -= 1f) {
+	IEnumerator leftFade() 
+	{
+		for (float f = 32f; f >= 0; f -= 1f) 
+		{
 			transform.position = new Vector2 (transform.position.x - .01f, transform.position.y);
 			yield return new WaitForSeconds(.01f);
 		}
 	}
 
-	IEnumerator rightFade() {
-		for (float f = 32f; f >= 0; f -= 1f) {
+	IEnumerator rightFade() 
+	{
+		for (float f = 32f; f >= 0; f -= 1f) 
+		{
 			transform.position = new Vector2 (transform.position.x + .01f, transform.position.y);
 			yield return new WaitForSeconds(.01f);
 		}
 	}
 
-	IEnumerator upFade() {
-		for (float f = 32f; f >= 0; f -= 1f) {
+	IEnumerator upFade() 
+	{
+		for (float f = 32f; f >= 0; f -= 1f) 
+		{
 			transform.position = new Vector2(transform.position.x, transform.position.y + .01f);
 			yield return new WaitForSeconds(.01f);
 		}
 	}
 
-	IEnumerator downFade() {
-		for (float f = 32f; f >= 0; f -= 1f) {
+	IEnumerator downFade() 
+	{
+		for (float f = 32f; f >= 0; f -= 1f) 
+		{
 			transform.position = new Vector2(transform.position.x, transform.position.y - .01f);
 			yield return new WaitForSeconds(.01f);
 		}
