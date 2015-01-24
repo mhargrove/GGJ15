@@ -1,0 +1,19 @@
+Stats to be tracked:
+
+Social
+Study
+Sleep
+Food
+Romantic
+Health
+
+Connections:
+
+Studying decreases social and increases study
+Sleeping increases sleep and increases health
+Eating increases food
+Chatting increases social
+Dating increases romantic
+Adderall increases sleep and decreases health (no time loss)
+Nyquill increases sleep decreases health (lose time)
+
