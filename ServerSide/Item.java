@@ -1,7 +1,7 @@
 public class Item{
-	String name;
-	int posX;
-	int posY;
+	public String name;
+	public int posX;
+	public int posY;
 	public Item(String name, int x, int y){
 		this.name = name;
 		this.posX = x;
