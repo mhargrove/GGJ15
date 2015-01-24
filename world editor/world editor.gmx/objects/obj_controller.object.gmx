@@ -113,29 +113,37 @@ if (keyboard_check_pressed(ord('N')) &amp;&amp; keyboard_check(vk_control))
 
 if (keyboard_check_pressed(ord('E')) &amp;&amp; keyboard_check(vk_control))
 {
-    var filename1, filename2, file1, file2, i, j;
-    filename1 = get_save_filename(".tiles", "world.tiles");
+    var filename1, filename2, file1, file2, i, j, surf;
+    filename1 = get_save_filename(".png", "world.png");
     filename2 = get_save_filename(".objects", "world.objects");
     if (filename1 == "")
         show_message("Tiles save file not specified.");
     else
     {
-        file1 = file_text_open_write(filename1);
-        
-        file_text_write_string(file1, string(global.map_width) + " " + string(global.map_height) + " ");
-        file_text_writeln(file1);
+        surf = surface_create(global.map_width * 32, global.map_height * 32);
+        surface_set_target(surf);
         
         for (j = 0; j &lt; global.map_height; j += 1)
         {
             for (i = 0; i &lt; global.map_width; i += 1)
             {
-                file_text_write_string(file1, string(global.map_tiles[i, j]) + "   ");
-                file_text_write_string(file2, string(global.map_objects[i, j]) + "   ");
+                draw_sprite(spr_tiles, global.map_tiles[i, j], 
+                                    i * 32, j * 32);
             }
-            file_text_writeln(file1);
+        }
+
+        for (j = 0; j &lt; global.map_height; j += 1)
+        {
+            for (i = 0; i &lt; global.map_width; i += 1)
+            {
+                draw_sprite(spr_objects, global.map_objects[i, j], 
+                            i * 32, j * 32);
+            }
         }
         
-        file_text_close(file1);
+        surface_reset_target();
+        surface_save(surf, filename1);
+        surface_free(surf);
     }
     
     if (filename2 == "")
