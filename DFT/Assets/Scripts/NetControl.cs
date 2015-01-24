@@ -149,8 +149,7 @@ public class NetControl : MonoBehaviour {
 		//lagging, just teleport.
 		else{
 			//play some catch up
-			player.gameObject.transform.position.x = tilePos.x / tileSize;
-			player.gameObject.transform.position.y = tilePos.y / tileSize;
+			player.gameObject.transform.position = new Vector2(tilePos.x / tileSize, tilePos.y / tileSize);
 		}
 
 		Debug.Log ("player: " + tilePos + " net: " + playerX + " ," + playerY);
