@@ -15,18 +15,20 @@ public class ProgressBar : MonoBehaviour
 
 	void Update () 
 	{
-		float val = -0.01f;
+		int val = 100;
 		if (Input.GetKeyDown (KeyCode.H)) 
 		{
+			if(val > 0)
+				val -= 1;
 			UpdateHealth(val);
 		}
 	}
 
-	public void UpdateHealth(float percent)
+	public void UpdateHealth(int percent)
 	{
 		m_BarForeground.fillAmount = percent;
 
-		if (percent < 0.2)
+		if (percent < 20)
 			m_BarForeground.color = m_Dying;
 	}
 }
