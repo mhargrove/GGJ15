@@ -6,7 +6,7 @@ public class MoveCharacterBasic : MonoBehaviour
 {
 	IEnumerator leftFade() 
 	{
-		for (float f = 32f; f >= 0; f -= 1f) 
+		for (float f = 31f; f >= 0; f -= 1f) 
 		{
 			transform.position = new Vector2 (transform.position.x - .01f, transform.position.y);
 			yield return new WaitForSeconds(.01f);
@@ -15,7 +15,7 @@ public class MoveCharacterBasic : MonoBehaviour
 
 	IEnumerator rightFade() 
 	{
-		for (float f = 32f; f >= 0; f -= 1f) 
+		for (float f = 31f; f >= 0; f -= 1f) 
 		{
 			transform.position = new Vector2 (transform.position.x + .01f, transform.position.y);
 			yield return new WaitForSeconds(.01f);
@@ -24,7 +24,7 @@ public class MoveCharacterBasic : MonoBehaviour
 
 	IEnumerator upFade() 
 	{
-		for (float f = 32f; f >= 0; f -= 1f) 
+		for (float f = 31f; f >= 0; f -= 1f) 
 		{
 			transform.position = new Vector2(transform.position.x, transform.position.y + .01f);
 			yield return new WaitForSeconds(.01f);
@@ -33,7 +33,7 @@ public class MoveCharacterBasic : MonoBehaviour
 
 	IEnumerator downFade() 
 	{
-		for (float f = 32f; f >= 0; f -= 1f) 
+		for (float f = 31f; f >= 0; f -= 1f) 
 		{
 			transform.position = new Vector2(transform.position.x, transform.position.y - .01f);
 			yield return new WaitForSeconds(.01f);
