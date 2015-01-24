@@ -1,0 +1,7 @@
+Current Work:
+Mitch - server-side network connections / message passing
+Thomas - Unity web API
+Morgan - Unity 2D project set-up
+Hunter - GGJ site update
+Everett - collecting assets
+
