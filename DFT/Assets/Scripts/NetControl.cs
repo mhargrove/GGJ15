@@ -14,7 +14,7 @@ public class NetControl : MonoBehaviour {
 	[SerializeField]private int connectionPort = 8000;
 	
 
-	private readonly float tileSize = 0.32f;
+	private readonly float tileSize = 0.33f;
 	private float lasttime      = 0;
 	private TcpClient client;
 	private NetworkStream toServer;
@@ -115,31 +115,42 @@ public class NetControl : MonoBehaviour {
 
 	void StatusUpdate()
 	{
-		bool moved = false;
-		if ((int)playerY > tilePos.y) {
-			player.moveUp();
-			tilePos.y++;
-			moved = true;
+		bool behind = false;
+		//figure out if the player is lagging
+		if (Mathf.Abs((int)playerY - tilePos.y) > 1 || Mathf.Abs((int)playerX - tilePos.x) > 1) {
+			behind = true;
 		}
-		else if ((int)playerY < tilePos.y) {
-			player.moveDown();
-			tilePos.y--;
-			moved = true;
+		if ((int)playerY != tilePos.y && (int)playerX != tilePos.x) {
+			behind = true;
 		}
-
-		if ((int)playerX > tilePos.x) {
-			player.moveRight();
-			tilePos.x++;
-			moved = true;
+		//if we aren't move normally
+		if (!behind) {
+			if ((int)playerY > tilePos.y) {
+				player.moveUp();
+				tilePos.y++;
+			}
+			else if ((int)playerY < tilePos.y) {
+				player.moveDown();
+				tilePos.y--;
+			}
+			
+			else if ((int)playerX > tilePos.x) {
+				player.moveRight();
+				tilePos.x++;
+			}
+			else if ((int)playerX < tilePos.x) {
+				player.moveLeft();
+				tilePos.x--;
+			}
+			else{
+				//TODO whatever happens on nothing
+			}	
 		}
-		else if ((int)playerX < tilePos.x) {
-			player.moveLeft();
-			tilePos.x--;
-			moved = true;
-		}
-
-		if (!moved) {
-			player.gameObject.transform.position = new Vector2((float) playerX * tileSize, (float) playerY * tileSize);
+		//lagging, just teleport.
+		else{
+			//play some catch up
+			player.gameObject.transform.position.x = tilePos.x / tileSize;
+			player.gameObject.transform.position.y = tilePos.y / tileSize;
 		}
 
 		Debug.Log ("player: " + tilePos + " net: " + playerX + " ," + playerY);
