@@ -113,14 +113,16 @@ if (keyboard_check_pressed(ord('N')) &amp;&amp; keyboard_check(vk_control))
 
 if (keyboard_check_pressed(ord('E')) &amp;&amp; keyboard_check(vk_control))
 {
-    var filename1, filename2, file2, i, j, surf;
+    var filename1, filename2, filename3, file2, i, j, surf, objs;
     filename1 = get_save_filename(".png", "world.png");
+    filename3 = get_save_filename(".png", "world_alpha.png");
     filename2 = get_save_filename(".objects", "world.objects");
     if (filename1 == "")
         show_message("Tiles save file not specified.");
     else
     {
         surf = surface_create(global.map_width * 32, global.map_height * 32);
+        objs = surface_create(global.map_width * 32, global.map_height * 32);
         surface_set_target(surf);
         
         for (j = 0; j &lt; global.map_height; j += 1)
@@ -141,9 +143,31 @@ if (keyboard_check_pressed(ord('E')) &amp;&amp; keyboard_check(vk_control))
             }
         }
         
+        surface_set_target(objs);
+        
+
+        for (j = 0; j &lt; global.map_height; j += 1)
+        {
+            for (i = 0; i &lt; global.map_width; i += 1)
+            {
+                draw_sprite(spr_objects, global.map_objects[i, j], 
+                            i * 32, j * 32);
+            }
+        }
+        
+        for (i = 1; i &lt; max(global.map_height, global.map_width) * 32; i += 2)
+        {
+            draw_set_blend_mode_ext(bm_zero, bm_zero);
+            draw_line(0, i, global.map_width * 32, i);
+            draw_line(i, 0, i, global.map_height * 32);
+            draw_set_blend_mode(bm_normal);
+        }
+        
         surface_reset_target();
         surface_save(surf, filename1);
+        surface_save(objs, filename3);
         surface_free(surf);
+        surface_free(objs);
     }
     
     if (filename2 == "")
