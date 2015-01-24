@@ -50,38 +50,7 @@ public class ServerSide{
 			}
 			//wait a bit to break up the loop
 			try {
-				if(System.currentTimeMillis() - timeSinceLastVerify < 10000){
-					Thread.sleep(100);
-				}
-				else{
-					//verify each client connected
-					if(DEBUG)
-						System.out.println("Verify users.");
-					for(Socket sock : socketWhisperer.clients){
-						updateUser(sock, "V");
-					}
-					Thread.sleep(200);
-					BufferedReader inbox;
-					for(Socket sock : socketWhisperer.clients){
-						//we expect a 'V' back from everyone or they get removed
-						try{
-							inbox = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-							if(inbox.ready()){
-								char response = (char) inbox.read();
-								if(response != 'V'){
-									socketWhisperer.clients.remove(sock);
-								}
-							}
-							else{
-								socketWhisperer.clients.remove(sock);
-							}
-						}
-						catch(IOException ioe){
-							ioe.printStackTrace();
-						}
-					}
-					timeSinceLastVerify = System.currentTimeMillis();
-				}
+				Thread.sleep(100);
 			} 
 			catch(InterruptedException ex) {
     			Thread.currentThread().interrupt();
@@ -123,8 +92,8 @@ public class ServerSide{
 		switch(ballot.getResults()){
 			case UP: PlayerY++; break;
 			case DOWN: PlayerY--; break;
-			case LEFT: PlayerX++; break;
-			case RIGHT: PlayerX--; break;
+			case LEFT: PlayerX--; break;
+			case RIGHT: PlayerX++; break;
 			case NONE: break;
 		}
 	}

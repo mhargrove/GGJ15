@@ -18,7 +18,6 @@ public class SocketListener extends Thread{
 			try{
 				Socket temp = acceptor.accept(); //runs until someone connects
 				clients.add(temp); 
-				System.out.println("New connection.");
 			}
 			catch(IOException ioe){
 				ioe.printStackTrace();
