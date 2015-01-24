@@ -128,6 +128,7 @@ if (keyboard_check_pressed(ord('E')) &amp;&amp; keyboard_check(vk_control))
             for (i = 0; i &lt; global.map_width; i += 1)
             {
                 file_text_write_string(file1, string(global.map_tiles[i, j]) + "   ");
+                file_text_write_string(file2, string(global.map_objects[i, j]) + "   ");
             }
             file_text_writeln(file1);
         }
@@ -148,7 +149,6 @@ if (keyboard_check_pressed(ord('E')) &amp;&amp; keyboard_check(vk_control))
         {
             for (i = 0; i &lt; global.map_width; i += 1)
             {
-                file_text_write_string(file2, string(global.map_objects[i, j]) + "   ");
             }
             file_text_writeln(file2);
         }
