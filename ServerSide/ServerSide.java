@@ -15,6 +15,7 @@ public class ServerSide{
 
 	//Gameplay vars
 	static final long VOTEWAITTIME = 5000; // in millis
+	static boolean collisionMap[][];
 	static VoteHandler ballot;
 	static int PlayerY;
 	static int PlayerX;
@@ -77,10 +78,51 @@ public class ServerSide{
 			stats = new Stats();
 			items = new ArrayList<Item>();
 			timeSinceLastVerify = System.currentTimeMillis();
+
+			//load the collision map
+			System.out.println("Loading collison map");
+			String fileLocation = "../world editor/world.objects";
+			String[] textFile = openFile(fileLocation);
+			int width, height;
+			String[] vector = textFile[0].split(" ");
+			width =  Integer.parseInt(vector[0]);
+			height = Integer.parseInt(vector[1]);
+			if(DEBUG) System.out.println("Map width " + width + " height " + height);
+			//build the collision map
+			collisionMap = new boolean[height][width];
+			for(int i=0; i<height; i++){
+				for(int j=0; j<width; j++){
+					collisionMap[i][j] = (textFile[i+1].charAt(j * 2) == '1');
+				}
+			}
+			printCollisionMap(collisionMap);
 		}
 		catch(IOException ioe){
 			ioe.printStackTrace();
 		}
+	}
+
+	public static void printCollisionMap(boolean[][] map){
+		for(int i=0; i<map.length; i++){
+			for(int j=0; j<map[i].length; j++){
+				if(map[i][j])
+					System.out.print("0");
+				else
+					System.out.print(" ");
+			}
+			System.out.println("");
+		}
+	}
+
+	public static String[] openFile(String path) throws IOException{
+		FileReader fr = new FileReader(path);
+		BufferedReader br = new BufferedReader(fr);
+		Scanner fRead = new Scanner(br);
+		String ret = "";
+		while(fRead.hasNext()){
+			ret += fRead.nextLine() + "\n";
+		}
+		return ret.split("\n");
 	}
 
 	public static void printStats(){
@@ -89,12 +131,37 @@ public class ServerSide{
 	}
 
 	public static void updateGame(){
-		switch(ballot.getResults()){
+		Action voteResult = ballot.getResults();
+		switch(voteResult){
 			case UP: PlayerY++; break;
 			case DOWN: PlayerY--; break;
 			case LEFT: PlayerX--; break;
 			case RIGHT: PlayerX++; break;
 			case NONE: break;
+		}
+		try{
+			if(collisionMap[-PlayerY][PlayerX]){
+			System.out.println("Bonk");
+			//revert the changes and do nothing else
+			switch(voteResult){
+				case UP: PlayerY--; break;
+				case DOWN: PlayerY++; break;
+				case LEFT: PlayerX++; break;
+				case RIGHT: PlayerX--; break;
+				case NONE: break;
+			}
+		}
+		}
+		catch(ArrayIndexOutOfBoundsException e){
+			System.out.println("Ouch");
+			//revert the changes anyway
+			switch(voteResult){
+				case UP: PlayerY--; break;
+				case DOWN: PlayerY++; break;
+				case LEFT: PlayerX++; break;
+				case RIGHT: PlayerX--; break;
+				case NONE: break;
+			}
 		}
 	}
 
