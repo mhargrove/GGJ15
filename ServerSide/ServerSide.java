@@ -14,7 +14,7 @@ public class ServerSide{
 	static long timeSinceLastVerify;
 
 	//Gameplay vars
-	static final long VOTEWAITTIME = 5000; // in millis
+	static final long VOTEWAITTIME = 3000; // in millis
 	static boolean collisionMap[][];
 	static VoteHandler ballot;
 	static int PlayerY;
@@ -72,8 +72,8 @@ public class ServerSide{
 
 			//init gameplay stuff
 			ballot = new VoteHandler();
-			PlayerX = 0;
-			PlayerY = 0;
+			PlayerX = 24;
+			PlayerY = -30;
 			daysLeft = 7;
 			stats = new Stats();
 			items = new ArrayList<Item>();
