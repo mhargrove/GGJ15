@@ -11,7 +11,7 @@ public class ServerSide{
 	static final int PORT = 8000;
 	static ServerSocket server;
 	static SocketListener socketWhisperer;
-	static ArrayList<Socket> clients;
+	static long timeSinceLastVerify;
 
 	//Gameplay vars
 	static final long VOTEWAITTIME = 5000; // in millis
@@ -32,17 +32,12 @@ public class ServerSide{
 		int ticks;
 		long loopStartTime = System.currentTimeMillis();
 		while(running){
-			//update new users
-			if(socketWhisperer.newClients()){
-				if(DEBUG){
-					System.out.println("adding new client");
-				}
-				clients = socketWhisperer.getClients();
-			}
-
+			//read the data from users first
 			readUsers();
+			//print the current state
 			printStats();
 
+			//initiate time-based decisions
 			if(System.currentTimeMillis() - loopStartTime > VOTEWAITTIME){
 				updateGame(); //handles votes and movement
 				updateUsers(); //Sends out the results
@@ -55,7 +50,38 @@ public class ServerSide{
 			}
 			//wait a bit to break up the loop
 			try {
-    			Thread.sleep(100);
+				if(System.currentTimeMillis() - timeSinceLastVerify < 10000){
+					Thread.sleep(100);
+				}
+				else{
+					//verify each client connected
+					if(DEBUG)
+						System.out.println("Verify users.");
+					for(Socket sock : socketWhisperer.clients){
+						updateUser(sock, "V");
+					}
+					Thread.sleep(200);
+					BufferedReader inbox;
+					for(Socket sock : socketWhisperer.clients){
+						//we expect a 'V' back from everyone or they get removed
+						try{
+							inbox = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+							if(inbox.ready()){
+								char response = (char) inbox.read();
+								if(response != 'V'){
+									socketWhisperer.clients.remove(sock);
+								}
+							}
+							else{
+								socketWhisperer.clients.remove(sock);
+							}
+						}
+						catch(IOException ioe){
+							ioe.printStackTrace();
+						}
+					}
+					timeSinceLastVerify = System.currentTimeMillis();
+				}
 			} 
 			catch(InterruptedException ex) {
     			Thread.currentThread().interrupt();
@@ -73,7 +99,6 @@ public class ServerSide{
 			}
 			socketWhisperer = new SocketListener(server);
 			socketWhisperer.start();
-			clients = new ArrayList<Socket>();
 
 			//init gameplay stuff
 			ballot = new VoteHandler();
@@ -82,6 +107,7 @@ public class ServerSide{
 			daysLeft = 7;
 			stats = new Stats();
 			items = new ArrayList<Item>();
+			timeSinceLastVerify = System.currentTimeMillis();
 		}
 		catch(IOException ioe){
 			ioe.printStackTrace();
@@ -90,7 +116,7 @@ public class ServerSide{
 
 	public static void printStats(){
 		System.out.print("\r");
-		System.out.print("Users: " + clients.size() + " votes: " + ballot.votesSumbmitted());
+		System.out.print("Users: " + socketWhisperer.clients.size() + " votes: " + ballot.votesSumbmitted());
 	}
 
 	public static void updateGame(){
@@ -102,12 +128,14 @@ public class ServerSide{
 			case NONE: break;
 		}
 	}
+
 	public static void updateUsers(){
 		String data = getMessage();
-		for(Socket s : clients){
+		for(Socket s : socketWhisperer.clients){
 			updateUser(s, data);
 		}
 	}
+
 	public static void updateUser(Socket s, String msg){
 		try{
 			PrintWriter toUser = new PrintWriter(s.getOutputStream(), true);
@@ -117,13 +145,15 @@ public class ServerSide{
 			ioe.printStackTrace();
 		}
 	}
+
 	public static void updateUser(Socket s){
 		String data = getMessage();
 		updateUser(s, data);
 	}
+
 	public static void readUsers(){
 		BufferedReader inbox;
-		for(Socket user : clients){
+		for(Socket user : socketWhisperer.clients){
 			try{
 				if(DEBUG){
 					System.out.println("Reading user " + user.toString());

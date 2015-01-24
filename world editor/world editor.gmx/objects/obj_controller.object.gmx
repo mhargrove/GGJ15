@@ -28,6 +28,8 @@
             <string>global.map_width = 16;//get_integer("Width? (MAX: 10000)", 16);
 global.map_height = 12;//get_integer("Height? (MAX: 10000)", 12);
 global.show_grid = true;
+global.show_tiles = true;
+global.show_objects = true;
 var i, j;
 for (i = 0; i &lt; global.map_width; i += 1)
 {
@@ -247,6 +249,25 @@ if (mouse_check_button(mb_left))
         {
             global.map_tiles[mouse_x div 32 + global.cam_x, mouse_y div 32 + global.cam_y] = global.tool_index;
         }
+        else if (global.tool_type == "OBJECTS")
+        {
+            global.map_objects[mouse_x div 32 + global.cam_x, mouse_y div 32 + global.cam_y] = global.tool_index;
+        }
+    }
+}
+
+if (mouse_check_button(mb_right))
+{
+    if (mouse_x &gt;= 0 &amp;&amp; mouse_x &lt; 512 &amp;&amp; mouse_y &gt;= 0 &amp;&amp; mouse_y &lt;= 384)
+    {
+        if (global.tool_type == "TILES")
+        {
+            global.map_tiles[mouse_x div 32 + global.cam_x, mouse_y div 32 + global.cam_y] = 0;
+        }
+        else if (global.tool_type == "OBJECTS")
+        {
+            global.map_objects[mouse_x div 32 + global.cam_x, mouse_y div 32 + global.cam_y] = 0;
+        }
     }
 }
 
@@ -255,6 +276,15 @@ if (keyboard_check_pressed(ord('G')))
     global.show_grid = !global.show_grid;
 }
 
+if (keyboard_check_pressed(ord('J')))
+{
+    global.show_objects = !global.show_objects;
+}
+
+if (keyboard_check_pressed(ord('K')))
+{
+    global.show_tiles = !global.show_tiles;
+}
 </string>
           </argument>
         </arguments>
@@ -278,22 +308,28 @@ if (keyboard_check_pressed(ord('G')))
           <argument>
             <kind>1</kind>
             <string>var i, j;
-for (i = 0; i &lt; 16; i += 1)
+
+if (global.show_tiles)
 {
-    for (j = 0; j &lt; 12; j += 1)
+    for (i = 0; i &lt; 16; i += 1)
     {
-        draw_sprite(spr_tiles, global.map_tiles[global.cam_x + i, global.cam_y + j], 
+        for (j = 0; j &lt; 12; j += 1)
+        {
+            draw_sprite(spr_tiles, global.map_tiles[global.cam_x + i, global.cam_y + j], 
                         i * 32, j * 32);
+        }
     }
 }
 
-for (i = 0; i &lt; 16; i += 1)
+if (global.show_objects)
 {
-    for (j = 0; j &lt; 12; j += 1)
+    for (i = 0; i &lt; 16; i += 1)
     {
-        if (global.map_objects[global.cam_x + i, global.cam_y + j] != 0)
-            draw_sprite(spr_foliage1x1, global.map_objects[global.cam_x + i, global.cam_y + j], 
+        for (j = 0; j &lt; 12; j += 1)
+        {
+            draw_sprite(spr_objects, global.map_objects[global.cam_x + i, global.cam_y + j], 
                         i * 32, j * 32);
+        }
     }
 }
 
@@ -323,8 +359,8 @@ if (mouse_x &gt;= 0 &amp;&amp; mouse_x &lt; 512 &amp;&amp; mouse_y &gt;= 0 &amp;
 draw_text(10, 430, "TOOL_TYPE: " + string(global.tool_type));
 draw_text(10, 450, "TOOL_INDEX: " + string(global.tool_index));
 
-draw_text(160, 430, "MAP_WIDTH: " + string(global.map_width));
-draw_text(160, 450, "MAP_HEIGHT: " + string(global.map_height));
+draw_text(200, 430, "MAP_WIDTH: " + string(global.map_width));
+draw_text(200, 450, "MAP_HEIGHT: " + string(global.map_height));
 
 draw_set_color(c_black);
 
@@ -333,6 +369,10 @@ if (mouse_x &gt;= 0 &amp;&amp; mouse_x &lt; 512 &amp;&amp; mouse_y &gt;= 0 &amp;
     if (global.tool_type == "TILES")
     {   
         draw_sprite_ext(spr_tiles, global.tool_index, (mouse_x div 32) * 32, (mouse_y div 32) * 32, 1, 1, 0, c_lime, .5);
+    }
+    else if (global.tool_type == "OBJECTS")
+    {   
+        draw_sprite_ext(spr_objects, global.tool_index, (mouse_x div 32) * 32, (mouse_y div 32) * 32, 1, 1, 0, c_aqua, .5);
     }
 }
 
