@@ -2,8 +2,12 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MoveCharacterBasic.cs">
     <Files>
+<<<<<<< HEAD
       <File FileName="Assets/Scripts/MoveCharacterBasic.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/CameraFollow.cs" Line="10" Column="54" />
+=======
+      <File FileName="Assets/Scripts/MoveCharacterBasic.cs" Line="55" Column="2" />
+>>>>>>> 8a856e84493797eeffbb3e509c82be52378a9a9c
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

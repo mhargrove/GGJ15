@@ -1,16 +1,15 @@
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.io.*;
 
 public class SocketListener extends Thread{
-	private ArrayList<Socket> clients;
-	private boolean newClients;
+	public CopyOnWriteArrayList<Socket> clients;
 	private ServerSocket acceptor;
 
 	public SocketListener(ServerSocket s){
 		this.acceptor = s;
-		clients = new ArrayList<Socket>();
-		newClients = false;
+		clients = new CopyOnWriteArrayList<Socket>();
 	}
 
 	public void run(){
@@ -19,21 +18,11 @@ public class SocketListener extends Thread{
 			try{
 				Socket temp = acceptor.accept(); //runs until someone connects
 				clients.add(temp); 
-				newClients = true;
 				System.out.println("New connection.");
 			}
 			catch(IOException ioe){
 				ioe.printStackTrace();
 			}
 		}
-	}
-
-	public boolean newClients(){
-		return newClients;
-	}
-
-	public ArrayList<Socket> getClients(){
-		newClients = false;
-		return clients;
 	}
 }
