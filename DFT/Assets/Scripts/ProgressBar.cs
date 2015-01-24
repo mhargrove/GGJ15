@@ -15,6 +15,11 @@ public class ProgressBar : MonoBehaviour
 
 	void Update () 
 	{
+		float val = -0.01f;
+		if (Input.GetKeyDown (KeyCode.H)) 
+		{
+			UpdateHealth(val);
+		}
 	}
 
 	public void UpdateHealth(float percent)
