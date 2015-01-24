@@ -14,7 +14,7 @@ public class NetControl : MonoBehaviour {
 	[SerializeField]private int connectionPort = 8000;
 	
 
-	private readonly float tileSize = 0.33f;
+	private readonly float tileSize = 0.32f;
 	private float lasttime      = 0;
 	private TcpClient client;
 	private NetworkStream toServer;
@@ -148,8 +148,11 @@ public class NetControl : MonoBehaviour {
 		}
 		//lagging, just teleport.
 		else{
+			Debug.Log("Catching up.");
 			//play some catch up
-			player.gameObject.transform.position = new Vector2(tilePos.x / tileSize, tilePos.y / tileSize);
+			player.teleport(new Vector2(playerX * tileSize, playerY * tileSize));			
+			tilePos.x = playerX;
+			tilePos.y = playerY;
 		}
 
 		Debug.Log ("player: " + tilePos + " net: " + playerX + " ," + playerY);

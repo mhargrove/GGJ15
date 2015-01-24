@@ -38,6 +38,10 @@ public class Player: MonoBehaviour
 	public void moveLeft(){StartCoroutine("leftFade");}
 	public void moveRight(){StartCoroutine("rightFade");}
 	public void moveDown(){StartCoroutine("downFade");}
+
+	public void teleport(Vector2 pos){
+		this.gameObject.transform.position = pos;
+	}
 	
 	void Update() 
 	{
