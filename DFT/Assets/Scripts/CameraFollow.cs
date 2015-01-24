@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraFollow : MonoBehaviour {
-
+public class CameraFollow : MonoBehaviour 
+{
 	public GameObject targetObject;
-	
-	// Update is called once per frame
-	void Update () {
+
+	void LateUpdate () 
+	{
 		float targetObjectX = targetObject.transform.position.x;
 		float targetObjectY = targetObject.transform.position.y;
 
