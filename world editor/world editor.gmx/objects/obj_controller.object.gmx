@@ -179,16 +179,7 @@ if (keyboard_check_pressed(ord('O')) &amp;&amp; keyboard_check(vk_control))
             }
             file_text_readln(file);
         }
-        /*
-        for (j = 0; j &lt; global.map_height; j += 1)
-        {
-            for (i = 0; i &lt; global.map_width; i += 1)
-            {
-                global.map_objects[i, j] = file_text_read_real(file);
-            }
-            file_text_readln(file);
-        }
-        */
+        
         file_text_close(file);
     }
 }
@@ -215,30 +206,47 @@ if (keyboard_check_pressed(ord('S')) &amp;&amp; keyboard_check(vk_control))
             }
             file_text_writeln(file);
         }
-        /*
+        
+        file_text_close(file);
+    }
+}
+
+if (keyboard_check_pressed(ord('A')) &amp;&amp; keyboard_check(vk_control))
+{
+    if (global.tool_type != "TILES")
+        show_message("Cannot apply repeated objects due to size mismatching. ");
+    else
+    {
         for (j = 0; j &lt; global.map_height; j += 1)
         {
             for (i = 0; i &lt; global.map_width; i += 1)
             {
-                file_text_write_string(file, string(global.map_objects[i, j]) + "  ");
+                global.map_tiles[i, j] = global.tool_index;
             }
-            file_text_writeln(file);
         }
-        */
-        file_text_close(file);
     }
 }
 
 if (keyboard_check_pressed(ord('T')))
 {
-    global.tool_index = get_integer("Tool?", 0);
+    global.tool_type = "TILES";
+    global.tool_index = get_integer("Tile type?", 0);
+}
+
+if (keyboard_check_pressed(ord('P')))
+{
+    global.tool_type = "OBJECTS";
+    global.tool_index = get_integer("Tile type?", 0);
 }
 
 if (mouse_check_button(mb_left))
 {
-    if (global.tool_type == "TILES")
+    if (mouse_x &gt;= 0 &amp;&amp; mouse_x &lt; 512 &amp;&amp; mouse_y &gt;= 0 &amp;&amp; mouse_y &lt;= 384)
     {
-        global.map_tiles[mouse_x div 32 + global.cam_x, mouse_y div 32 + global.cam_y] = global.tool_index;
+        if (global.tool_type == "TILES")
+        {
+            global.map_tiles[mouse_x div 32 + global.cam_x, mouse_y div 32 + global.cam_y] = global.tool_index;
+        }
     }
 }
 
@@ -307,11 +315,16 @@ draw_text(10, 390, "CAM_X: " + string(global.cam_x));
 draw_text(10, 410, "CAM_Y: " + string(global.cam_y));
 draw_text(160, 390, "MOUSE_X: " + string(mouse_x div 32 + global.cam_x));
 draw_text(160, 410, "MOUSE_Y: " + string(mouse_y div 32 + global.cam_y));
-if (mouse_x &gt;= 0 &amp;&amp; mouse_x &lt; 512 &amp;&amp; mouse_y &gt;= 0 &amp;&amp; mouse_y &lt;= 384)
+if (mouse_x &gt;= 0 &amp;&amp; mouse_x &lt; 512 &amp;&amp; mouse_y &gt;= 0 &amp;&amp; mouse_y &lt; 384)
 {
     draw_text(310, 390, "TILE_ID: " + string(global.map_tiles[mouse_x div 32 + global.cam_x, mouse_y div 32 + global.cam_y]));
-    draw_text(310, 410, "OBJECT_ID: undefined");//" + string());
+    draw_text(310, 410, "OBJECT_ID: " + string(global.map_objects[mouse_x div 32 + global.cam_x, mouse_y div 32 + global.cam_y]));
 }
+draw_text(10, 430, "TOOL_TYPE: " + string(global.tool_type));
+draw_text(10, 450, "TOOL_INDEX: " + string(global.tool_index));
+
+draw_text(160, 430, "MAP_WIDTH: " + string(global.map_width));
+draw_text(160, 450, "MAP_HEIGHT: " + string(global.map_height));
 
 draw_set_color(c_black);
 
