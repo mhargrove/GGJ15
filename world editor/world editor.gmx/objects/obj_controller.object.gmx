@@ -113,7 +113,7 @@ if (keyboard_check_pressed(ord('N')) &amp;&amp; keyboard_check(vk_control))
 
 if (keyboard_check_pressed(ord('E')) &amp;&amp; keyboard_check(vk_control))
 {
-    var filename1, filename2, file1, file2, i, j, surf;
+    var filename1, filename2, file2, i, j, surf;
     filename1 = get_save_filename(".png", "world.png");
     filename2 = get_save_filename(".objects", "world.objects");
     if (filename1 == "")
@@ -159,6 +159,8 @@ if (keyboard_check_pressed(ord('E')) &amp;&amp; keyboard_check(vk_control))
         {
             for (i = 0; i &lt; global.map_width; i += 1)
             {
+                if (global.map_objects[i, j] == 0 &amp;&amp; global.map_tiles[i, j] != 1) file_text_write_string(file2, "0 ");
+                else file_text_write_string(file2, "1 ");
             }
             file_text_writeln(file2);
         }
