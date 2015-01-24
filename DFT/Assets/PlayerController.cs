@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TestScript : MonoBehaviour {
-
-	[SerializeField] int m_TestInt = 0;
+public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
