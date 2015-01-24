@@ -138,8 +138,9 @@ if (keyboard_check_pressed(ord('E')) &amp;&amp; keyboard_check(vk_control))
         {
             for (i = 0; i &lt; global.map_width; i += 1)
             {
-                draw_sprite(spr_objects, global.map_objects[i, j], 
-                            i * 32, j * 32);
+                if (global.map_objects[i, j] != 1)
+                    draw_sprite(spr_objects, global.map_objects[i, j], 
+                                i * 32, j * 32);
             }
         }
         
@@ -150,8 +151,9 @@ if (keyboard_check_pressed(ord('E')) &amp;&amp; keyboard_check(vk_control))
         {
             for (i = 0; i &lt; global.map_width; i += 1)
             {
-                draw_sprite(spr_objects, global.map_objects[i, j], 
-                            i * 32, j * 32);
+                if (global.map_objects[i, j] != 1)
+                    draw_sprite(spr_objects, global.map_objects[i, j], 
+                                i * 32, j * 32);
             }
         }
         
@@ -183,7 +185,7 @@ if (keyboard_check_pressed(ord('E')) &amp;&amp; keyboard_check(vk_control))
         {
             for (i = 0; i &lt; global.map_width; i += 1)
             {
-                if (global.map_objects[i, j] == 0 &amp;&amp; global.map_tiles[i, j] != 1) file_text_write_string(file2, "0 ");
+                if (global.map_objects[i, j] == 0) file_text_write_string(file2, "0 ");
                 else file_text_write_string(file2, "1 ");
             }
             file_text_writeln(file2);
