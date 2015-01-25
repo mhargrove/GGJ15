@@ -32,6 +32,8 @@ public class ProgressBar : MonoBehaviour
 		m_BarForeground.fillAmount = percent * 0.01f;
 		
 		if (percent < 20)
-			m_BarForeground.color = m_Dying;
+						m_BarForeground.color = m_Dying;
+				else
+						m_BarForeground.color = m_Normal;		
 	}
 }
