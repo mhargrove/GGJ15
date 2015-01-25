@@ -42,7 +42,7 @@ public class Item{
 			case FOOD: 
 				result.health += 20;
 				result.cash -= 10;
-				result.hungry -= 80;
+				result.hungry += 80;
 				break; 
 			case COIN: 
 				result.cash += 25;

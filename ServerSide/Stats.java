@@ -12,12 +12,15 @@ public class Stats{
 	public int timeDelta = 0;
 	public int moveFastFor = 0;
 
+	//odder data, but nessesary for endgame
+	public boolean hasGirlFriend = true;
+
 	public Stats(){
 		health  = MAXVALUE;
-		sleepy  = 0;
-		social  = MAXVALUE / 2;
-		hungry  = MAXVALUE / 2;
-		romance = MAXVALUE / 2;
+		sleepy  = MAXVALUE;
+		social  = MAXVALUE;
+		hungry  = MAXVALUE;
+		romance = MAXVALUE;
 		study   = 0;
 		cash = 0;
 	}
