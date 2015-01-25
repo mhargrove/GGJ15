@@ -21,7 +21,7 @@ public class Stats{
 		social  = MAXVALUE;
 		hungry  = MAXVALUE;
 		romance = MAXVALUE;
-		study   = 0;
+		study   = MAXVALUE;
 		cash = 0;
 	}
 }
