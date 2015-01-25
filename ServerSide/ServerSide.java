@@ -16,7 +16,7 @@ public class ServerSide{
 	//Gameplay vars
 	static final long VOTEWAITTIME = 1500; // in millis
 	static final long ITEMWAITTIME = 4000;
-	static final long TOTALGAMETIME = 1000 * 60  * 14; 
+	static final long TOTALGAMETIME = 4000;//1000 * 60  * 14; 
 	static final int MAXITEMS = 40;
 	static long gameStartTime;
 	static long voteLoopTime;
