@@ -394,6 +394,7 @@ public class ServerSide{
 		temp += Integer.toString(stats.hungry) + "|";
 		temp += Integer.toString(stats.romance) + "|";
 		temp += Integer.toString(stats.study) + "|";
+		temp += Integer.toString(stats.cash) + "|";
 		for(Item item : items){
 			temp += item.type.netName + "|";
 			temp += Integer.toString(item.posX) + "|";
