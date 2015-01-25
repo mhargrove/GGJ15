@@ -17,6 +17,7 @@ public class ServerSide{
 	static final long VOTEWAITTIME = 1500; // in millis
 	static final long ITEMWAITTIME = 4000;
 	static final long TOTALGAMETIME = 1000 * 60  * 14; 
+	static final int MAXITEMS = 40;
 	static long gameStartTime;
 	static long voteLoopTime;
 	static long itemLoopTime;
@@ -41,6 +42,7 @@ public class ServerSide{
 		while(running){
 			//read the data from users first
 			readUsers();
+
 			//print the current state
 			printStats();
 
@@ -51,7 +53,7 @@ public class ServerSide{
 				voteLoopTime = System.currentTimeMillis();
 			}
 			//spawn a new item
-			if(System.currentTimeMillis() - itemLoopTime > ITEMWAITTIME){
+			if(System.currentTimeMillis() - itemLoopTime > ITEMWAITTIME && items.size() < MAXITEMS){
 				try{
 					int x, y;
 					double variance = 10.0f;
@@ -80,7 +82,6 @@ public class ServerSide{
 					if(!needNewLocation){
 						Item i = new Item(ItemTypes.getNonStaticRandom(), x , y);
 						items.add(i);
-						System.out.println("\nnew item: " + i.type.netName + " at location " + i.posX + " ," + i.posY);
 					} 
 				}
 				catch(ArrayIndexOutOfBoundsException e){
@@ -171,7 +172,8 @@ public class ServerSide{
 
 	public static void printStats(){
 		System.out.print("\r");
-		System.out.print("Users: " + socketWhisperer.clients.size() + " votes: " + ballot.votesSumbmitted());
+		System.out.print("Users: " + socketWhisperer.clients.size() + " votes: " + ballot.votesSumbmitted() + 
+			" items count: "+items.size());
 	}
 
 	//update the game logic. Collisions, item uses, etc
@@ -211,9 +213,11 @@ public class ServerSide{
 		//check to see if we've enountered an item
 		Item usedItem = null;
 		for(Item i : items){
-			stats = i.apply(stats);
-			usedItem = i;
-			break;
+			if(i.posX == PlayerX && i.posY == PlayerY){
+				stats = i.apply(stats);
+				usedItem = i;
+				break;
+			}
 		}
 		items.remove(usedItem);
 

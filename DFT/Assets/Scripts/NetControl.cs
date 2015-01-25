@@ -90,7 +90,7 @@ public class NetControl : MonoBehaviour {
 	
 	private void handleMessage(string msg){
 		if (msg.Length != 2) {
-			arrows.Reset();
+			//arrows.Reset();
 			string[] data = msg.Split ('|');//--------------------------------------------------------------------------
 			playerX = int.Parse (data[0]);
 			playerY = int.Parse (data [1]);

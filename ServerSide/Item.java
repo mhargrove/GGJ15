@@ -8,14 +8,9 @@ public class Item{
 		this.posY = y;
 	}
 
-	/*
-	public int health;
-	public int sleepy;
-	public int social;
-	public int food;
-	public int romance;
-	public int study;
-	 */
+	public String toString(){
+		return type.netName+"@"+"["+posX+","+posY+"]";
+	}
 
 	public Stats apply(Stats in){
 		Stats result = in;
