@@ -17,7 +17,7 @@ public class ResultScreen : MonoBehaviour {
 	public int cash;
 	 */
 	void Start () {
-		res = GameObject.Find ("results").GetComponent<GameResults> ();
+		res = GameObject.Find ("Results(Clone)").GetComponent<GameResults> ();
 
 		//add witty messages for each stat
 		char grade;
@@ -34,7 +34,7 @@ public class ResultScreen : MonoBehaviour {
 			case 'B': text.text += " B. Those get degrees too, right?"; break;
 			case 'C': text.text += " C. It's probably what you expected."; break;
 			case 'D': text.text += " D. It's just like the little league 'You tried' award.";break;
-			case 'F': text.text += " F. At least you're pretty, right?"; break;
+			case 'F': text.text += "n F. At least you're pretty, right?"; break;
 		}
 
 		if (res.sleepy > 50) addText ("Sleep level","You stayed well rested.");
