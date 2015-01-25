@@ -12,7 +12,7 @@ public class Player: MonoBehaviour
 	void Start ()
 	{
 		animator = this.GetComponent<Animator>();
-		animator.StopPlayback ();
+		animator.SetInteger("Direction", 4);
 	}
 
 	IEnumerator leftFade() {
@@ -78,20 +78,36 @@ public class Player: MonoBehaviour
 				arrows.Select(0);
 				animator.SetInteger("Direction", 2);
 			}
+			else if (Input.GetKeyUp(KeyCode.UpArrow))
+			{
+				animator.SetInteger("Direction", 6);
+			}
 			else if (Input.GetKeyDown(KeyCode.DownArrow))
 			{
 				arrows.Select(1);
 				animator.SetInteger("Direction", 0);
+			}
+			else if (Input.GetKeyUp(KeyCode.DownArrow))
+			{
+				animator.SetInteger("Direction", 4);
 			}
 			else if (Input.GetKeyDown(KeyCode.LeftArrow))
 			{
 				arrows.Select(2);
 				animator.SetInteger("Direction", 1);
 			}
+			else if (Input.GetKeyUp(KeyCode.LeftArrow))
+			{
+				animator.SetInteger("Direction", 5);
+			}
 			else if (Input.GetKeyDown(KeyCode.RightArrow))
 			{
 				arrows.Select(3);
 				animator.SetInteger("Direction", 3);
+			}
+			else if (Input.GetKeyUp(KeyCode.RightArrow))
+			{
+				animator.SetInteger("Direction", 7);
 			}
 
 			if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))

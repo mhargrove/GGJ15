@@ -27,6 +27,7 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private GameObject foodItem;
 	[SerializeField] private GameObject coin;
 	[SerializeField] private GameObject book;
+	[SerializeField] private GameObject results;
 	[SerializeField] private string connectionIP = "167.96.64.74";
 	[SerializeField] private int connectionPort = 8000;
 	[SerializeField] private Animator animator;
@@ -38,7 +39,7 @@ public class NetControl : MonoBehaviour {
 	private byte[] netRecvBuffer;
 	
 	private Vector2 tilePos = new Vector2(0, 0);
-	private int playerX, playerY, health, sleepy, social, food, romance, study;
+	private int playerX, playerY, health, sleepy, social, food, romance, study, cash;
 	private string timeLeft = "";
 	private string[] itemNames;
 	private float[] itemX, itemY;
@@ -93,10 +94,18 @@ public class NetControl : MonoBehaviour {
 	}
 	
 	private void handleMessage(string msg){
-		if (msg.Trim().Equals("LOSEGAME"))
-		    Application.LoadLevel(3);
-		if (msg.Trim ().Equals ("WINGAME"))
+		if (msg.Trim ().Equals ("LOSEGAME")) {
+			GameObject res = Instantiate(results) as GameObject;
+			res.GetComponent<GameResults>().setGameResults(health, sleepy, social, food, romance, study, cash);
+			Object.DontDestroyOnLoad(res);
+			Application.LoadLevel (3);
+		}
+		if (msg.Trim ().Equals ("WINGAME")) {
+			GameObject res = Instantiate(results) as GameObject;
+			res.GetComponent<GameResults>().setGameResults(health, sleepy, social, food, romance, study, cash);
+			Object.DontDestroyOnLoad(res);
 			Application.LoadLevel (2);
+		}
 		if (msg.Length != 2) {
 			arrows.Reset();
 			//Handle the message

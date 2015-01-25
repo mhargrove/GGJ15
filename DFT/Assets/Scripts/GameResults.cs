@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+<<<<<<< HEAD
 public class GameResults : MonoBehaviour{
+=======
+public class GameResults : MonoBehaviour {
+>>>>>>> e6a5d33b18d55adc4fffc746011bc42c2b8b0e30
 
 	public int health;
 	public int sleepy;
@@ -21,4 +25,5 @@ public class GameResults : MonoBehaviour{
 		this.study = stu;
 		this.cash = cash;
 	}
+
 }
