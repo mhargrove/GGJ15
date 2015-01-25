@@ -27,7 +27,6 @@ public class ServerSide{
 	static int PlayerX;
 	static int mapWidth;
 	static int mapHeight;
-	static int daysLeft;
 	static Stats stats;
 	static ArrayList<Item> items;
 	static ArrayList<Vector2> itemSpawnLocations;
@@ -74,13 +73,18 @@ public class ServerSide{
 		try{
 			//init net stuff
 			hostAddr = InetAddress.getLocalHost();
-			server = new ServerSocket(PORT, 100, hostAddr);
-			if(server.isBound()){
-				System.out.println("Server started with address "+hostAddr.toString() + " on port " + PORT);
+			if(server == null){
+				server = new ServerSocket(PORT, 100, hostAddr);
+				if(server.isBound()){
+					System.out.println("Server started with address "+hostAddr.toString() + " on port " + PORT);
+				}
 			}
-			socketWhisperer = new SocketListener(server);
-			socketWhisperer.start();
-
+			
+			if(socketWhisperer == null){
+				socketWhisperer = new SocketListener(server);
+				socketWhisperer.start();
+			}
+			
 			//init gameplay stuff
 			gameStartTime = System.currentTimeMillis();
 			voteLoopTime = gameStartTime;
@@ -88,41 +92,47 @@ public class ServerSide{
 			ballot = new VoteHandler();
 			PlayerX = 31;
 			PlayerY = -36;
-			daysLeft = 7;
 			stats = new Stats();
-			items = new ArrayList<Item>();
-			itemSpawnLocations = new ArrayList<Vector2>();
+			resetItems();
 			timeSinceLastVerify = System.currentTimeMillis();
-
-			//load the collision map text file
-			System.out.println("Loading collison map");
-			String fileLocation = "../world editor/world.objects";
-			String[] textFile = openFile(fileLocation);
-			String[] vector = textFile[0].split(" ");
-			mapWidth =  Integer.parseInt(vector[0]);
-			mapHeight = Integer.parseInt(vector[1]);
-			System.out.println("\nMap width " + mapWidth + " height " + mapHeight);
-			
-			//build the collision map
-			collisionMap = new boolean[mapHeight][mapWidth];
-			for(int i=0; i<mapHeight; i++){
-				for(int j=0; j<mapWidth; j++){
-					collisionMap[i][j] = (textFile[i+1].charAt(j * 2) == '1');
-					if(!collisionMap[i][j]){
-						itemSpawnLocations.add(new Vector2(j, -i));
+						
+			//build the collision map (and the item spawn locations. Same job)
+			if(itemSpawnLocations == null)
+				itemSpawnLocations = new ArrayList<Vector2>();
+			if(collisionMap == null){
+				//load the collision map text file
+				System.out.println("Loading collison map");
+				String fileLocation = "../world editor/world.objects";
+				String[] textFile = openFile(fileLocation);
+				String[] vector = textFile[0].split(" ");
+				mapWidth =  Integer.parseInt(vector[0]);
+				mapHeight = Integer.parseInt(vector[1]);
+				System.out.println("\nMap width " + mapWidth + " height " + mapHeight);
+				
+				collisionMap = new boolean[mapHeight][mapWidth];
+				for(int i=0; i<mapHeight; i++){
+					for(int j=0; j<mapWidth; j++){
+						collisionMap[i][j] = (textFile[i+1].charAt(j * 2) == '1');
+						if(!collisionMap[i][j]){
+							itemSpawnLocations.add(new Vector2(j, -i));
+						}
 					}
 				}
+				printMap(collisionMap);
 			}
-			printMap(collisionMap);
 
-			//spawn static items
-			items.add(new Item(ItemTypes.BED, 20, -32));
-			items.add(new Item(ItemTypes.BOOKS, 0,0));
-			items.add(new Item(ItemTypes.FOOD, 20, -31));
+			
 		}
 		catch(IOException ioe){
 			ioe.printStackTrace();
 		}
+	}
+
+	public static void resetItems(){
+		items = new ArrayList<Item>();
+		items.add(new Item(ItemTypes.BED, 27, -37));
+		items.add(new Item(ItemTypes.BED, 34, -37));
+		items.add(new Item(ItemTypes.BED, 51, -8));
 	}
 
 	public static String[] openFile(String path) throws IOException{
@@ -166,10 +176,14 @@ public class ServerSide{
 		}
 	}
 
+	public static long getTimeElapsed(){
+		return System.currentTimeMillis() + stats.timeDelta - gameStartTime; 
+	}
+
 	public static void printStats(){
 		System.out.print("\r");
 		System.out.print("Users: " + socketWhisperer.clients.size() + " votes: " + ballot.votesSumbmitted() + 
-			" items count: "+items.size());
+			" items count: "+items.size() + " time left: " + formatTimeRemaining());
 	}
 
 	public static void endGame(){
@@ -177,6 +191,13 @@ public class ServerSide{
 		updateUsers();
 		for(Socket user : socketWhisperer.clients){
 			updateUser(user, "ENDGAME");
+		}
+		System.out.println("\nGame over. Reseting in 3 seconds.");
+		try{
+			Thread.sleep(3000);
+		}
+		catch(InterruptedException ie){
+			//whateva
 		}
 		init();
 	}
@@ -227,9 +248,31 @@ public class ServerSide{
 		}
 		items.remove(usedItem);
 
-		//check stats for effects or triggers
+		//gradually deteorate stats
+		stats.romance--;
+		stats.sleepy-=2;
+		stats.hungry-=2;
+
+		//Check for trigger conditions
+		if(stats.health <= 0){
+			endGame(); //dead. Terrible ending.
+		}
+		if(stats.sleepy <= 0){
+			//pass out and wind up in hospital
+			stats.sleepy = 50;
+			stats.cash = 0;
+			PlayerX = 50;
+			PlayerY = -8;
+		}
+		if(stats.hungry <= 0){
+			stats.health-=2;
+		}
+		if(stats.romance <=0){
+			stats.hasGirlFriend = false;
+		}
+
 		//end game
-		if(System.currentTimeMillis() + stats.timeDelta - gameStartTime > TOTALGAMETIME){
+		if(getTimeElapsed() > TOTALGAMETIME){
 			endGame();
 		}
 	}
@@ -338,7 +381,7 @@ public class ServerSide{
 		String temp = "";
 		temp += Integer.toString(PlayerX) + "|";
 		temp += Integer.toString(PlayerY) + "|";
-		temp += Integer.toString(daysLeft - stats.timeDelta) + "|";
+		temp += formatTimeRemaining() + "|";
 		temp += Integer.toString(stats.health) + "|";
 		temp += Integer.toString(stats.sleepy) + "|";
 		temp += Integer.toString(stats.social) + "|";
@@ -351,5 +394,13 @@ public class ServerSide{
 			temp += Integer.toString(item.posY) + "|";
 		}
 		return temp;
+	}
+
+	public static String formatTimeRemaining(){
+		long r = TOTALGAMETIME - getTimeElapsed();
+		
+		r = r / 1000;
+		r = r / 60;
+		return "" + r;
 	}
 }
