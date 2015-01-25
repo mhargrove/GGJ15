@@ -16,7 +16,18 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private ProgressBar hungerBar;
 	[SerializeField] private ProgressBar romanceBar;
 	[SerializeField] private ProgressBar studyBar;
+<<<<<<< HEAD
 	[SerializeField] private ArrowSelection arrows;
+=======
+	[SerializeField] private GameObject bed;
+	[SerializeField] private GameObject flower;
+	[SerializeField] private GameObject medkit;
+	[SerializeField] private GameObject nyquil;
+	[SerializeField] private GameObject adderall;
+	[SerializeField] private GameObject foodItem;
+	[SerializeField] private GameObject coin;
+	[SerializeField] private GameObject book;
+>>>>>>> 95e54398adaff8aa07a0990737117c77d4cae021
 	[SerializeField] private string connectionIP = "167.96.64.74";
 	[SerializeField] private int connectionPort = 8000;
 	
@@ -183,8 +194,8 @@ public class NetControl : MonoBehaviour {
 			romanceBar.UpdateHealth (romance);
 		if (study != studyBar.fill)
 			studyBar.UpdateHealth (study);
-		
-		
+
+
 		for (int i = 0; i < items.Length; i++)
 			Destroy (items [i]);
 		items = new GameObject[itemNames.Length];
@@ -192,17 +203,29 @@ public class NetControl : MonoBehaviour {
 		{
 			switch (itemNames[i])
 			{
-			case "Adderall":
-				//					items[i] = GameObject.Instantiate("Adderall", Vector3(itemX[i], itemY[i], 0));
+			case "BED":
+				items[i] = Instantiate(bed, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
 				break;
-			case "Nyquill":
-				//items[i] = GameObject.Instantiate("Nyquill", Vector3(itemX[i], itemY[i], 0));
+			case "FLOWER":
+				items[i] = Instantiate(flower, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
 				break;
-			case "Book":
-				//items [i] = GameObject.Instantiate("Book", Vector3(itemX[i], itemY[i], 0));
+			case "MEDKIT":
+				items [i] = Instantiate(medkit, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
 				break;
-			default:
-				//etc
+			case "NYQUIL":
+				items[i] = Instantiate(nyquil, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
+				break;
+			case "ADDERALL":
+				items[i] = Instantiate(adderall, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
+				break;
+			case "FOOD":
+				items[i] = Instantiate(foodItem, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
+				break;
+			case "COIN":
+				items[i] = Instantiate(coin, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
+				break;
+			default: //BOOK
+				items[i] = Instantiate(book, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
 				break;
 			}
 		}
