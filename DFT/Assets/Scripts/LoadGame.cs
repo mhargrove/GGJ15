@@ -6,10 +6,10 @@ public class LoadGame : MonoBehaviour {
 
 	void Start ()
 	{
-		if (Application.loadedLevel == 0)
+		if (Application.loadedLevel == 0 || Application.loadedLevel == 4)
 			StartCoroutine("Load");
 		else
-			StartCoroutine("WaitNLoad");
+			StartCoroutine("LoadResults");
 	}
 
 	IEnumerator Load()
@@ -18,9 +18,10 @@ public class LoadGame : MonoBehaviour {
 		Application.LoadLevel(1);
 		}
 
-	IEnumerator WaitNLoad()
+	IEnumerator LoadResults()
 	{
-		yield return new WaitForSeconds(20);
-		Application.LoadLevel (1);
+		Object.DontDestroyOnLoad(GameObject.Find("results"));
+		yield return new WaitForSeconds(8);
+		Application.LoadLevel (4);
 		}
 }
