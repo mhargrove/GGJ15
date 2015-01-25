@@ -16,7 +16,7 @@ public class ServerSide{
 	//Gameplay vars
 	static final long VOTEWAITTIME = 1500; // in millis
 	static final long ITEMWAITTIME = 4000;
-	static final long TOTALGAMETIME = 1000 * 60  * 14;
+	static final long TOTALGAMETIME = 250 * 64 * 14; //1000 * 60  * 14;
 	static final int MAXITEMS = 40;
 	static long gameStartTime;
 	static long voteLoopTime;
@@ -251,8 +251,8 @@ public class ServerSide{
 
 		//gradually deteorate stats
 		stats.romance--;
-		stats.sleepy-=2;
-		stats.hungry-=2;
+		stats.sleepy--;
+		stats.hungry--;
 
 		//Check for trigger conditions
 		if(stats.health <= 0){
@@ -260,7 +260,7 @@ public class ServerSide{
 		}
 		if(stats.sleepy <= 0){
 			//pass out and wind up in hospital
-			stats.sleepy = 50;
+			stats.sleepy = 100;
 			stats.cash = 0;
 			PlayerX = 50;
 			PlayerY = -8;

@@ -36,7 +36,7 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private string connectionIP = "167.96.64.74";
 	[SerializeField] private int connectionPort = 8000;
 	[SerializeField] private Animator animator;
-	private GameObject results;
+	[SerializeField] private GameObject results;
 
 	private readonly float tileSize = 0.32f;
 	private TcpClient client;
