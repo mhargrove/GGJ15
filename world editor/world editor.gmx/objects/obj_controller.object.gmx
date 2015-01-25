@@ -359,9 +359,9 @@ if (global.show_tiles)
 
 if (global.show_objects)
 {
-    for (i = 0; i &lt; 16; i += 1)
+    for (j = 0; j &lt; 12; j += 1)
     {
-        for (j = 0; j &lt; 12; j += 1)
+        for (i = 0; i &lt; 16; i += 1)
         {
             draw_sprite(spr_objects, global.map_objects[global.cam_x + i, global.cam_y + j], 
                         i * 32, j * 32);
