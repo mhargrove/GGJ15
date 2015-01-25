@@ -8,6 +8,7 @@ public class Player: MonoBehaviour
 	[SerializeField] private ArrowSelection arrows;
 
 	private Animator animator;
+	private int curr;
 
 	void Start ()
 	{
@@ -51,7 +52,40 @@ public class Player: MonoBehaviour
 	public void teleport(Vector2 pos){
 		this.gameObject.transform.position = pos;
 	}
-	
+
+	void MoveSprite (int dir)
+	{
+		if (dir == 0) 
+		{
+			arrows.Select(0);
+			animator.SetInteger("Direction", 2);
+			curr = 6;
+		} 
+		else if (dir == 1) 
+		{
+			arrows.Select(1);
+			animator.SetInteger("Direction", 0);
+			curr = 4;
+		}
+		else if (dir == 2) 
+		{
+			arrows.Select(2);
+			animator.SetInteger("Direction", 1);
+			curr = 5;
+		}
+		else if (dir == 3) 
+		{
+			arrows.Select(3);
+			animator.SetInteger("Direction", 3);
+			curr = 7;
+		}
+	}
+
+	void StopSprite ()
+	{
+		animator.SetInteger("Direction", curr);
+	}
+
 	void Update() 
 	{
 		if(isDebug){
@@ -73,46 +107,31 @@ public class Player: MonoBehaviour
 				StartCoroutine("downFade");
 			}
 
-			if (Input.GetKeyDown(KeyCode.UpArrow))
+			if (Input.GetKeyDown (KeyCode.LeftArrow)) 
 			{
-				arrows.Select(0);
-				animator.SetInteger("Direction", 2);
+				MoveSprite (2);
+				curr = 6;
+			} 
+			else if (Input.GetKeyDown (KeyCode.RightArrow)) 
+			{
+				MoveSprite (3);
+				curr = 7;
 			}
-			else if (Input.GetKeyUp(KeyCode.UpArrow))
+			else if (Input.GetKeyDown(KeyCode.UpArrow))
 			{
-				animator.SetInteger("Direction", 6);
+				MoveSprite (0);
+				curr = 5;
 			}
 			else if (Input.GetKeyDown(KeyCode.DownArrow))
 			{
-				arrows.Select(1);
-				animator.SetInteger("Direction", 0);
-			}
-			else if (Input.GetKeyUp(KeyCode.DownArrow))
-			{
-				animator.SetInteger("Direction", 4);
-			}
-			else if (Input.GetKeyDown(KeyCode.LeftArrow))
-			{
-				arrows.Select(2);
-				animator.SetInteger("Direction", 1);
-			}
-			else if (Input.GetKeyUp(KeyCode.LeftArrow))
-			{
-				animator.SetInteger("Direction", 5);
-			}
-			else if (Input.GetKeyDown(KeyCode.RightArrow))
-			{
-				arrows.Select(3);
-				animator.SetInteger("Direction", 3);
-			}
-			else if (Input.GetKeyUp(KeyCode.RightArrow))
-			{
-				animator.SetInteger("Direction", 7);
+				MoveSprite (1);
+				curr = 4;
 			}
 
 			if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))
 			{
-				arrows.Reset();
+				arrows.Reset ();
+				StopSprite ();
 			}
 		}
 	}
