@@ -5,6 +5,7 @@ using System.Collections;
 public class Player: MonoBehaviour 
 {
 	[SerializeField] private bool isDebug = false;
+	[SerializeField] private ArrowSelection arrows;
 
 	IEnumerator leftFade() {
 		for (float f = 31f; f >= 0; f -= 1f) {
@@ -61,6 +62,23 @@ public class Player: MonoBehaviour
 			else if (Input.GetKeyDown(KeyCode.DownArrow))
 			{
 				StartCoroutine("downFade");
+			}
+
+			if (Input.GetKeyDown(KeyCode.UpArrow))
+			{
+				arrows.Select(0);
+			}
+			else if (Input.GetKeyDown(KeyCode.DownArrow))
+			{
+				arrows.Select(1);
+			}
+			else if (Input.GetKeyDown(KeyCode.LeftArrow))
+			{
+				arrows.Select(2);
+			}
+			else if (Input.GetKeyDown(KeyCode.RightArrow))
+			{
+				arrows.Select(3);
 			}
 		}
 	}
