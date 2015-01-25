@@ -56,6 +56,7 @@ public class ResultScreen : MonoBehaviour {
 	}
 
 	void addText(string header, string msg){
-		text.text += "\n" + header + ":   " + msg;
+		text.text += "\n" + header + ":\t";
+		text.text += msg;
 	}
 }
