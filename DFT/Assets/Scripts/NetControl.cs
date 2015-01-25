@@ -104,7 +104,7 @@ public class NetControl : MonoBehaviour {
 			itemX = new float[count];
 			itemY = new float[count];
 			if(count > 0){
-				for(int i = 9, j = 0; i < data.Length; i+=3) {
+				for(int i = 9, j = 0; i < 9 + count - 3; i+=3) {
 					itemNames [j] = data [i];
 					itemX [j] = float.Parse (data [i + 1]);
 					itemY [j++] = float.Parse (data [i + 2]);

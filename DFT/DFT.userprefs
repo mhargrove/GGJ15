@@ -1,10 +1,25 @@
 ﻿<Properties>
+<<<<<<< HEAD
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/NetControl.cs">
     <Files>
       <File FileName="Assets/Scripts/ArrowSelection.cs" Line="14" Column="16" />
       <File FileName="Assets/Scripts/NetControl.cs" Line="234" Column="1" />
       <File FileName="Assets/Scripts/Player.cs" Line="67" Column="4" />
+=======
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+<<<<<<< HEAD
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\NetControl.cs">
+    <Files>
+      <File FileName="Assets\Scripts\NetControl.cs" Line="165" Column="1" />
+      <File FileName="Assets\Scripts\ProgressBar.cs" Line="1" Column="1" />
+=======
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Player.cs">
+    <Files>
+      <File FileName="Assets/Scripts/ProgressBar.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/NetControl.cs" Line="1" Column="1" />
+>>>>>>> d654a4170eeabf790a67e1eb2b9040f905577964
+>>>>>>> 319f7372ab93c735ff5883706c13b6020ef249d3
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
