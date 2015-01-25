@@ -17,6 +17,7 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private ProgressBar hungerBar;
 	[SerializeField] private ProgressBar romanceBar;
 	[SerializeField] private ProgressBar studyBar;
+	[SerializeField] private Text money;
 	[SerializeField] private Text Timer;
 	[SerializeField] private ArrowSelection arrows;
 	[SerializeField] private GameObject bed;
@@ -27,10 +28,10 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private GameObject foodItem;
 	[SerializeField] private GameObject coin;
 	[SerializeField] private GameObject book;
-	[SerializeField] private GameObject results;
 	[SerializeField] private string connectionIP = "167.96.64.74";
 	[SerializeField] private int connectionPort = 8000;
 	[SerializeField] private Animator animator;
+	private GameObject results;
 
 	private readonly float tileSize = 0.32f;
 	private TcpClient client;
@@ -39,8 +40,8 @@ public class NetControl : MonoBehaviour {
 	private byte[] netRecvBuffer;
 	
 	private Vector2 tilePos = new Vector2(0, 0);
-	private int playerX, playerY, health, sleepy, social, food, romance, study, cash;
-	private string timeLeft = "";
+	private int playerX, playerY, health, sleepy, social, food, romance, study;
+	private string timeLeft = "", cash = "";
 	private string[] itemNames;
 	private float[] itemX, itemY;
 	
@@ -96,13 +97,13 @@ public class NetControl : MonoBehaviour {
 	private void handleMessage(string msg){
 		if (msg.Trim ().Equals ("LOSEGAME")) {
 			GameObject res = Instantiate(results) as GameObject;
-			res.GetComponent<GameResults>().setGameResults(health, sleepy, social, food, romance, study, cash);
+			res.GetComponent<GameResults>().setGameResults(health, sleepy, social, food, romance, study, int.Parse(cash));
 			Object.DontDestroyOnLoad(res);
 			Application.LoadLevel (3);
 		}
 		if (msg.Trim ().Equals ("WINGAME")) {
 			GameObject res = Instantiate(results) as GameObject;
-			res.GetComponent<GameResults>().setGameResults(health, sleepy, social, food, romance, study, cash);
+			res.GetComponent<GameResults>().setGameResults(health, sleepy, social, food, romance, study, int.Parse(cash));
 			Object.DontDestroyOnLoad(res);
 			Application.LoadLevel (2);
 		}
@@ -119,14 +120,15 @@ public class NetControl : MonoBehaviour {
 			food = int.Parse (data [6]);
 			romance = int.Parse (data [7]);
 			study = int.Parse (data [8]);
+			cash = data[9];
 
 			//From here, it's the optional items
-			int count = (data.Length - 9) / 3;
+			int count = (data.Length - 10) / 3;
 			itemNames = new string[count];
 			itemX = new float[count];
 			itemY = new float[count];
 			if(count > 0){
-				for(int i = 9, j = 0; i < data.Length - 3; i+=3, j++) {
+				for(int i = 10, j = 0; i < data.Length - 3; i+=3, j++) {
 					itemNames [j] = data [i];
 					itemX [j] = int.Parse (data [i + 1]);
 					itemY [j] = int.Parse (data [i + 2]);
@@ -202,7 +204,7 @@ public class NetControl : MonoBehaviour {
 		
 		Debug.Log ("player: " + tilePos + " net: " + playerX + " ," + playerY);
 		
-		
+
 		if (health != healthBar.fill)
 			healthBar.UpdateHealth (health);
 		if (sleepy != sleepBar.fill)
@@ -215,6 +217,8 @@ public class NetControl : MonoBehaviour {
 			romanceBar.UpdateHealth (romance);
 		if (study != studyBar.fill)
 			studyBar.UpdateHealth (study);
+		if (!cash.Equals(money.text))
+			money.text = cash;
 
 
 		//Destroy all items previous to these ones

@@ -16,7 +16,7 @@ public class ServerSide{
 	//Gameplay vars
 	static final long VOTEWAITTIME = 1500; // in millis
 	static final long ITEMWAITTIME = 4000;
-	static final long TOTALGAMETIME = 1000 * 60  * 14; 
+	static final long TOTALGAMETIME = 1000 * 60  * 14;
 	static final int MAXITEMS = 40;
 	static long gameStartTime;
 	static long voteLoopTime;
@@ -62,7 +62,7 @@ public class ServerSide{
 			//wait a bit to break up the loop
 			try {
 				Thread.sleep(100);
-			} 
+			}
 			catch(InterruptedException ex) {
     			Thread.currentThread().interrupt();
 			}
@@ -79,12 +79,12 @@ public class ServerSide{
 					System.out.println("Server started with address "+hostAddr.toString() + " on port " + PORT);
 				}
 			}
-			
+
 			if(socketWhisperer == null){
 				socketWhisperer = new SocketListener(server);
 				socketWhisperer.start();
 			}
-			
+
 			//init gameplay stuff
 			gameStartTime = System.currentTimeMillis();
 			voteLoopTime = gameStartTime;
@@ -95,7 +95,7 @@ public class ServerSide{
 			stats = new Stats();
 			resetItems();
 			timeSinceLastVerify = System.currentTimeMillis();
-						
+
 			//build the collision map (and the item spawn locations. Same job)
 			if(itemSpawnLocations == null)
 				itemSpawnLocations = new ArrayList<Vector2>();
@@ -108,7 +108,7 @@ public class ServerSide{
 				mapWidth =  Integer.parseInt(vector[0]);
 				mapHeight = Integer.parseInt(vector[1]);
 				System.out.println("\nMap width " + mapWidth + " height " + mapHeight);
-				
+
 				collisionMap = new boolean[mapHeight][mapWidth];
 				for(int i=0; i<mapHeight; i++){
 					for(int j=0; j<mapWidth; j++){
@@ -121,7 +121,7 @@ public class ServerSide{
 				printMap(collisionMap);
 			}
 
-			
+
 		}
 		catch(IOException ioe){
 			ioe.printStackTrace();
@@ -177,12 +177,12 @@ public class ServerSide{
 	}
 
 	public static long getTimeElapsed(){
-		return System.currentTimeMillis() + stats.timeDelta - gameStartTime; 
+		return System.currentTimeMillis() + stats.timeDelta - gameStartTime;
 	}
 
 	public static void printStats(){
 		System.out.print("\r");
-		System.out.print("Users: " + socketWhisperer.clients.size() + " votes: " + ballot.votesSumbmitted() + 
+		System.out.print("Users: " + socketWhisperer.clients.size() + " votes: " + ballot.votesSumbmitted() +
 			" items count: "+items.size() + " time left: " + formatTimeRemaining());
 	}
 
@@ -289,7 +289,7 @@ public class ServerSide{
 			updateUser(s, data);
 		}
 		try{
-			Thread.sleep(750);	
+			Thread.sleep(750);
 		}
 		catch(InterruptedException ie){
 			//whatevah
@@ -304,8 +304,8 @@ public class ServerSide{
 				}
 				finally{
 					socketWhisperer.clients.remove(s);
-				}	
-			} 
+				}
+			}
 		}
 	}
 
@@ -333,7 +333,7 @@ public class ServerSide{
 				}
 				inbox = new BufferedReader(new InputStreamReader(user.getInputStream()));
 				if(inbox.ready()){
-					char msg = (char)inbox.read();					
+					char msg = (char)inbox.read();
 					//parse the message
 					if(msg == 'S'){
 						updateUser(user);
@@ -357,7 +357,7 @@ public class ServerSide{
 						System.out.println("Client sent : " + msg + " -not recogonized command.");
 					}
 				}
-			}	
+			}
 			catch(IOException ioe){
 				ioe.printStackTrace();
 			}
@@ -394,6 +394,7 @@ public class ServerSide{
 		temp += Integer.toString(stats.hungry) + "|";
 		temp += Integer.toString(stats.romance) + "|";
 		temp += Integer.toString(stats.study) + "|";
+		temp += Integer.toString(stats.cash) + "|";
 		for(Item item : items){
 			temp += item.type.netName + "|";
 			temp += Integer.toString(item.posX) + "|";
@@ -404,7 +405,7 @@ public class ServerSide{
 
 	public static String formatTimeRemaining(){
 		long r = TOTALGAMETIME - getTimeElapsed();
-		
+
 		r = r / 1000;
 		r = r / 60;
 		return "" + r;
