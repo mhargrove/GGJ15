@@ -93,6 +93,10 @@ public class NetControl : MonoBehaviour {
 	}
 	
 	private void handleMessage(string msg){
+		if (msg.Trim().Equals("LOSEGAME"))
+		    Application.LoadLevel(3);
+		if (msg.Trim ().Equals ("WINGAME"))
+			Application.LoadLevel (2);
 		if (msg.Length != 2) {
 			arrows.Reset();
 			//Handle the message
