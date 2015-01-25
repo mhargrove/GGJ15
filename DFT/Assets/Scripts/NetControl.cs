@@ -16,9 +16,7 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private ProgressBar hungerBar;
 	[SerializeField] private ProgressBar romanceBar;
 	[SerializeField] private ProgressBar studyBar;
-<<<<<<< HEAD
 	[SerializeField] private ArrowSelection arrows;
-=======
 	[SerializeField] private GameObject bed;
 	[SerializeField] private GameObject flower;
 	[SerializeField] private GameObject medkit;
@@ -27,7 +25,6 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private GameObject foodItem;
 	[SerializeField] private GameObject coin;
 	[SerializeField] private GameObject book;
->>>>>>> 95e54398adaff8aa07a0990737117c77d4cae021
 	[SerializeField] private string connectionIP = "167.96.64.74";
 	[SerializeField] private int connectionPort = 8000;
 	
