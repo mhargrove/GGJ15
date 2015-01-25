@@ -16,6 +16,10 @@ public class ServerSide{
 	//Gameplay vars
 	static final long VOTEWAITTIME = 1500; // in millis
 	static final long ITEMWAITTIME = 4000;
+	static final long TOTALGAMETIME = 1000 * 60  * 14; 
+	static long gameStartTime;
+	static long voteLoopTime;
+	static long itemLoopTime;
 	static boolean collisionMap[][];
 	static VoteHandler ballot;
 	static int PlayerY;
@@ -32,10 +36,8 @@ public class ServerSide{
 	public static void main(String[] args){
 		System.out.println("----------Server started----------");
 		init();
+
 		boolean running = true;
-		int ticks;
-		long voteLoopTime = System.currentTimeMillis();
-		long itemLoopTime = voteLoopTime;
 		while(running){
 			//read the data from users first
 			readUsers();
@@ -108,14 +110,15 @@ public class ServerSide{
 			socketWhisperer.start();
 
 			//init gameplay stuff
+			gameStartTime = System.currentTimeMillis();
+			voteLoopTime = gameStartTime;
+			itemLoopTime = voteLoopTime;
 			ballot = new VoteHandler();
 			PlayerX = 23;
 			PlayerY = -30;
 			daysLeft = 7;
 			stats = new Stats();
 			items = new ArrayList<Item>();
-			//static items
-			items.add(new Item(ItemTypes.BED, 21, 31));
 			timeSinceLastVerify = System.currentTimeMillis();
 
 			//load the collision map
@@ -135,8 +138,8 @@ public class ServerSide{
 			}
 			printCollisionMap(collisionMap);
 
-			//spawn items
-
+			//spawn static items
+			items.add(new Item(ItemTypes.BED, 21, -31));
 		}
 		catch(IOException ioe){
 			ioe.printStackTrace();
@@ -215,6 +218,19 @@ public class ServerSide{
 		items.remove(usedItem);
 
 		//check stats for effects or triggers
+		//end game
+		if(System.currentTimeMillis() + stats.timeDelta - gameStartTime > TOTALGAMETIME){
+			endGame();
+		}
+	}
+
+	public static void endGame(){
+		//TODO send endgame signal
+		updateUsers();
+		for(Socket user : socketWhisperer.clients){
+			updateUser(user, "ENDGAME");
+		}
+		init();
 	}
 
 	public static void updateUsers(){
@@ -222,6 +238,35 @@ public class ServerSide{
 		for(Socket s : socketWhisperer.clients){
 			updateUser(s, data);
 		}
+		try{
+			Thread.sleep(500);	
+		}
+		catch(InterruptedException ie){
+			//whatevah
+		}
+		for(Socket s : socketWhisperer.clients){
+			if(!connectionOpen(s)){
+				socketWhisperer.clients.remove(s);
+			} 
+		}
+	}
+
+	public static boolean connectionOpen(Socket s){
+		try{
+			BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+			if(in.ready()){
+				char msg = (char)in.read();
+				//just read it and deposit
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		catch(IOException ioe){
+
+		}
+		return false;
 	}
 
 	public static void updateUser(Socket s, String msg){
@@ -265,6 +310,9 @@ public class ServerSide{
 					else if(msg == 'R'){
 						ballot.voteRight(user);
 					}
+					else if(msg == 'V'){
+						//do nothing, but we shouldn't get this
+					}
 					else{
 						System.out.println("Client sent : " + msg + " -not recogonized command.");
 					}
@@ -281,7 +329,7 @@ public class ServerSide{
 		String temp = "";
 		temp += Integer.toString(PlayerX) + "|";
 		temp += Integer.toString(PlayerY) + "|";
-		temp += Integer.toString(daysLeft) + "|";
+		temp += Integer.toString(daysLeft - stats.timeDelta) + "|";
 		temp += Integer.toString(stats.health) + "|";
 		temp += Integer.toString(stats.sleepy) + "|";
 		temp += Integer.toString(stats.social) + "|";

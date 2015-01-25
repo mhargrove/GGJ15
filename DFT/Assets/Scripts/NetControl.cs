@@ -77,6 +77,7 @@ public class NetControl : MonoBehaviour {
 		for (int i=0; i<msgs.Length; i++) {
 			if(!msgs[i].Equals("")) {
 				Debug.Log (Time.time + " Got Message: " + msgs[i] + " with length " + msgs[i].Length + " and index " + i);
+				sendMessage("V");
 				handleMessage(msgs[i]);
 			}
 		}
