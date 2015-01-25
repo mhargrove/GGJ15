@@ -17,7 +17,7 @@ public class ResultScreen : MonoBehaviour {
 	public int cash;
 	 */
 	void Start () {
-		res = GameObject.Find ("results").GetComponent<GameResults> ();
+		res = GameObject.Find ("Results(Clone)").GetComponent<GameResults> ();
 
 		//add witty messages for each stat
 		char grade;
