@@ -34,9 +34,9 @@ public class Item{
 				result.timeDelta += 15;
 				break;
 			case ADDERAL: 
-				result.sleepy -= 50;
+				result.sleepy += 50;
 				result.cash -= 30;
-				result.health -= 5;
+				result.health -= 10;
 				result.moveFastFor = 10;
 				break;
 			case FOOD: 

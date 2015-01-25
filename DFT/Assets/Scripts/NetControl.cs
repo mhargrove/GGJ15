@@ -117,13 +117,13 @@ public class NetControl : MonoBehaviour {
 			Object.DontDestroyOnLoad(res);
 			Application.LoadLevel (3);
 		}
-		if (msg.Trim ().Equals ("WINGAME")) {
+		else if (msg.Trim ().Equals ("WINGAME")) {
 			GameObject res = Instantiate(results) as GameObject;
 			res.GetComponent<GameResults>().setGameResults(health, sleepy, social, food, romance, study, int.Parse(cash));
 			Object.DontDestroyOnLoad(res);
 			Application.LoadLevel (2);
 		}
-		if (msg.Length != 2) {
+		else if (msg.Length != 2) {
 			arrows.Reset();
 			//Handle the message
 			string[] data = msg.Split ('|');
