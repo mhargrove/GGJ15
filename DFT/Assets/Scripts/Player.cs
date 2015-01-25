@@ -80,6 +80,11 @@ public class Player: MonoBehaviour
 			{
 				arrows.Select(3);
 			}
+
+			if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))
+			{
+				arrows.Reset();
+			}
 		}
 	}
 }
