@@ -7,6 +7,13 @@ public class Player: MonoBehaviour
 	[SerializeField] private bool isDebug = false;
 	[SerializeField] private ArrowSelection arrows;
 
+	private Animator animator;
+
+	void Start ()
+	{
+		animator = this.GetComponent<Animator>();
+	}
+
 	IEnumerator leftFade() {
 		for (float f = 31f; f >= 0; f -= 1f) {
 			this.gameObject.transform.position = new Vector2 (transform.position.x - .01f, transform.position.y);
@@ -67,18 +74,22 @@ public class Player: MonoBehaviour
 			if (Input.GetKeyDown(KeyCode.UpArrow))
 			{
 				arrows.Select(0);
+				animator.SetInteger("Direction", 2);
 			}
 			else if (Input.GetKeyDown(KeyCode.DownArrow))
 			{
 				arrows.Select(1);
+				animator.SetInteger("Direction", 0);
 			}
 			else if (Input.GetKeyDown(KeyCode.LeftArrow))
 			{
 				arrows.Select(2);
+				animator.SetInteger("Direction", 1);
 			}
 			else if (Input.GetKeyDown(KeyCode.RightArrow))
 			{
 				arrows.Select(3);
+				animator.SetInteger("Direction", 3);
 			}
 
 			if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))
