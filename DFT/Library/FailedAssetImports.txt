@@ -1,1 +1,1 @@
-Assets/win_scene/frame157.png
+Assets/lose_scene/frame42.png
