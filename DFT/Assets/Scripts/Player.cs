@@ -12,6 +12,7 @@ public class Player: MonoBehaviour
 	void Start ()
 	{
 		animator = this.GetComponent<Animator>();
+		animator.StopPlayback ();
 	}
 
 	IEnumerator leftFade() {
@@ -54,6 +55,7 @@ public class Player: MonoBehaviour
 	void Update() 
 	{
 		if(isDebug){
+			animator.StopPlayback ();
 			if (Input.GetKeyDown (KeyCode.LeftArrow)) 
 			{
 				StartCoroutine("leftFade");
