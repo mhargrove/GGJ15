@@ -115,8 +115,8 @@ public class ServerSide{
 			voteLoopTime = gameStartTime;
 			itemLoopTime = voteLoopTime;
 			ballot = new VoteHandler();
-			PlayerX = 23;
-			PlayerY = -30;
+			PlayerX = 31;
+			PlayerY = -36;
 			daysLeft = 7;
 			stats = new Stats();
 			items = new ArrayList<Item>();
@@ -129,7 +129,7 @@ public class ServerSide{
 			String[] vector = textFile[0].split(" ");
 			mapWidth =  Integer.parseInt(vector[0]);
 			mapHeight = Integer.parseInt(vector[1]);
-			if(DEBUG) System.out.println("Map width " + mapWidth + " height " + mapHeight);
+			System.out.println("\nMap width " + mapWidth + " height " + mapHeight);
 			//build the collision map
 			collisionMap = new boolean[mapHeight][mapWidth];
 			for(int i=0; i<mapHeight; i++){
@@ -137,7 +137,7 @@ public class ServerSide{
 					collisionMap[i][j] = (textFile[i+1].charAt(j * 2) == '1');
 				}
 			}
-			printCollisionMap(collisionMap);
+			printMap(collisionMap);
 
 			//spawn static items
 			items.add(new Item(ItemTypes.BED, 20, -32));
@@ -156,6 +156,24 @@ public class ServerSide{
 					System.out.print("0");
 				else
 					System.out.print(" ");
+			}
+			System.out.println("");
+		}
+	}
+
+	public static void printMap(boolean[][] map){
+		System.out.println("");
+		for(int i=0; i<map.length; i++){
+			for(int j=0; j<map[i].length; j++){
+				if(i==-PlayerY && j==PlayerX)
+					System.out.print("X");
+				else{
+					if(map[i][j]){
+						System.out.print("0");
+					}
+					else
+						System.out.print(" ");
+				}
 			}
 			System.out.println("");
 		}
@@ -191,6 +209,7 @@ public class ServerSide{
 		try{
 			if(collisionMap[-PlayerY][PlayerX]){
 			//revert the changes and do nothing else
+			System.out.println(" bonk.");
 			switch(voteResult){
 				case UP: PlayerY--; break;
 				case DOWN: PlayerY++; break;
@@ -201,7 +220,7 @@ public class ServerSide{
 		}
 		}
 		catch(ArrayIndexOutOfBoundsException e){
-			System.out.println("Ouch");
+			System.out.println(" Ouch");
 			//revert the changes anyway
 			switch(voteResult){
 				case UP: PlayerY--; break;
