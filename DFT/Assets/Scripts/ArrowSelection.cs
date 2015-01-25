@@ -19,6 +19,14 @@ public class ArrowSelection : MonoBehaviour
 		m_RightArrow.color = m_Default;
 	}
 
+	public void Reset ()
+	{
+		m_UpArrow.color = m_Default;
+		m_DownArrow.color = m_Default;
+		m_LeftArrow.color = m_Default;
+		m_RightArrow.color = m_Default;
+	}
+
 	public void Select (int dir)
 	{
 		if (dir == 0) 
