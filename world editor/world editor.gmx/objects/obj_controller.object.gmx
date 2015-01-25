@@ -157,11 +157,12 @@ if (keyboard_check_pressed(ord('E')) &amp;&amp; keyboard_check(vk_control))
             }
         }
         
-        for (i = 1; i &lt; max(global.map_height, global.map_width) * 32; i += 2)
+        for (i = 1; i &lt; max(global.map_height, global.map_width) * 64; i += 2)
         {
             draw_set_blend_mode_ext(bm_zero, bm_zero);
-            draw_line(0, i, global.map_width * 32, i);
-            draw_line(i, 0, i, global.map_height * 32);
+            //draw_line(0, i, global.map_width * 32, i);
+            //draw_line(i, 0, i, global.map_height * 32);
+            draw_line(i, 0, 0, i);
             draw_set_blend_mode(bm_normal);
         }
         
