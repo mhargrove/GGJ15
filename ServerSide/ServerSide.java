@@ -30,6 +30,7 @@ public class ServerSide{
 	static int daysLeft;
 	static Stats stats;
 	static ArrayList<Item> items;
+	static ArrayList<Vector2> itemSpawnLocations;
 
 	//Other
 	static final boolean DEBUG = false;
@@ -54,39 +55,9 @@ public class ServerSide{
 			}
 			//spawn a new item
 			if(System.currentTimeMillis() - itemLoopTime > ITEMWAITTIME && items.size() < MAXITEMS){
-				try{
-					int x, y;
-					double variance = 10.0f;
-					Random rand = new Random();
-					//generate locations close to the player
-					x = Math.min((int)(PlayerX + rand.nextGaussian() * variance), mapWidth);
-					y = Math.min((int)(PlayerY + rand.nextGaussian() * variance), mapHeight);
-					//make sure they aren't in a wall or something
-					boolean needNewLocation = collisionMap[x][-y];
-					if(needNewLocation){
-						int newX = x, newY = -y, loops = 0;
-						while(needNewLocation){
-							newX+=(-1 + (Math.random() * 2));
-							newY+=(-1 + (Math.random() * 2));
-							needNewLocation = collisionMap[newX][newY];
-							if(loops++ == 10){
-								//skip this one
-								break;
-							}
-						}
-						if(!needNewLocation){
-							x = newX; 
-							y = -newY;
-						}
-					}
-					if(!needNewLocation){
-						Item i = new Item(ItemTypes.getNonStaticRandom(), x , y);
-						items.add(i);
-					} 
-				}
-				catch(ArrayIndexOutOfBoundsException e){
-					//oh well
-				}
+				Random rand = new Random();
+				Vector2 nextCoord = itemSpawnLocations.get(rand.nextInt(itemSpawnLocations.size()));
+				items.add(new Item(ItemTypes.getNonStaticRandom(), nextCoord.x, nextCoord.y));
 				itemLoopTime = System.currentTimeMillis();
 			}
 			//wait a bit to break up the loop
@@ -120,9 +91,10 @@ public class ServerSide{
 			daysLeft = 7;
 			stats = new Stats();
 			items = new ArrayList<Item>();
+			itemSpawnLocations = new ArrayList<Vector2>();
 			timeSinceLastVerify = System.currentTimeMillis();
 
-			//load the collision map
+			//load the collision map text file
 			System.out.println("Loading collison map");
 			String fileLocation = "../world editor/world.objects";
 			String[] textFile = openFile(fileLocation);
@@ -130,11 +102,15 @@ public class ServerSide{
 			mapWidth =  Integer.parseInt(vector[0]);
 			mapHeight = Integer.parseInt(vector[1]);
 			System.out.println("\nMap width " + mapWidth + " height " + mapHeight);
+			
 			//build the collision map
 			collisionMap = new boolean[mapHeight][mapWidth];
 			for(int i=0; i<mapHeight; i++){
 				for(int j=0; j<mapWidth; j++){
 					collisionMap[i][j] = (textFile[i+1].charAt(j * 2) == '1');
+					if(!collisionMap[i][j]){
+						itemSpawnLocations.add(new Vector2(j, -i));
+					}
 				}
 			}
 			printMap(collisionMap);
@@ -147,6 +123,17 @@ public class ServerSide{
 		catch(IOException ioe){
 			ioe.printStackTrace();
 		}
+	}
+
+	public static String[] openFile(String path) throws IOException{
+		FileReader fr = new FileReader(path);
+		BufferedReader br = new BufferedReader(fr);
+		Scanner fRead = new Scanner(br);
+		String ret = "";
+		while(fRead.hasNext()){
+			ret += fRead.nextLine() + "\n";
+		}
+		return ret.split("\n");
 	}
 
 	public static void printCollisionMap(boolean[][] map){
@@ -179,21 +166,19 @@ public class ServerSide{
 		}
 	}
 
-	public static String[] openFile(String path) throws IOException{
-		FileReader fr = new FileReader(path);
-		BufferedReader br = new BufferedReader(fr);
-		Scanner fRead = new Scanner(br);
-		String ret = "";
-		while(fRead.hasNext()){
-			ret += fRead.nextLine() + "\n";
-		}
-		return ret.split("\n");
-	}
-
 	public static void printStats(){
 		System.out.print("\r");
 		System.out.print("Users: " + socketWhisperer.clients.size() + " votes: " + ballot.votesSumbmitted() + 
 			" items count: "+items.size());
+	}
+
+	public static void endGame(){
+		//TODO send endgame signal
+		updateUsers();
+		for(Socket user : socketWhisperer.clients){
+			updateUser(user, "ENDGAME");
+		}
+		init();
 	}
 
 	//update the game logic. Collisions, item uses, etc
@@ -249,22 +234,13 @@ public class ServerSide{
 		}
 	}
 
-	public static void endGame(){
-		//TODO send endgame signal
-		updateUsers();
-		for(Socket user : socketWhisperer.clients){
-			updateUser(user, "ENDGAME");
-		}
-		init();
-	}
-
 	public static void updateUsers(){
 		String data = getMessage();
 		for(Socket s : socketWhisperer.clients){
 			updateUser(s, data);
 		}
 		try{
-			Thread.sleep(500);	
+			Thread.sleep(750);	
 		}
 		catch(InterruptedException ie){
 			//whatevah
@@ -282,24 +258,6 @@ public class ServerSide{
 				}	
 			} 
 		}
-	}
-
-	public static boolean connectionOpen(Socket s){
-		try{
-			BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			if(in.ready()){
-				char msg = (char)in.read();
-				//just read it and deposit
-				return true;
-			}
-			else{
-				return false;
-			}
-		}
-		catch(IOException ioe){
-
-		}
-		return false;
 	}
 
 	public static void updateUser(Socket s, String msg){
@@ -355,6 +313,24 @@ public class ServerSide{
 				ioe.printStackTrace();
 			}
 		}
+	}
+
+	public static boolean connectionOpen(Socket s){
+		try{
+			BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+			if(in.ready()){
+				char msg = (char)in.read();
+				//just read it and deposit
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		catch(IOException ioe){
+
+		}
+		return false;
 	}
 
 	//Builds the message to be sent. Somewhat expensive
