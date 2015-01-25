@@ -1,17 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-<<<<<<< HEAD
 public class GameResults : MonoBehaviour{
-=======
-<<<<<<< HEAD
-
-public class GameResults : MonoBehaviour {
->>>>>>> 16da484b8ce55d54a4f6381656380619084e3ed4
-
-=======
-public class GameResults : MonoBehaviour{
->>>>>>> cefa87cff158e8086cfe0466623cc27be19dc97f
 	public int health;
 	public int sleepy;
 	public int social;
