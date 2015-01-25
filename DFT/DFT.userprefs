@@ -1,8 +1,15 @@
 ﻿<Properties>
+<<<<<<< Updated upstream
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\NetControl.cs">
     <Files>
       <File FileName="Assets\Scripts\NetControl.cs" Line="100" Column="4" />
+=======
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/ProgressBar.cs">
+    <Files>
+      <File FileName="Assets/Scripts/ProgressBar.cs" Line="30" Column="39" />
+>>>>>>> Stashed changes
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
