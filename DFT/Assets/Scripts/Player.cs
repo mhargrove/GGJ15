@@ -53,7 +53,7 @@ public class Player: MonoBehaviour
 		this.gameObject.transform.position = pos;
 	}
 
-	void MoveSprite (int dir)
+	public void MoveSprite (int dir)
 	{
 		if (dir == 0) 
 		{
@@ -81,7 +81,7 @@ public class Player: MonoBehaviour
 		}
 	}
 
-	void StopSprite ()
+	public void StopSprite ()
 	{
 		animator.SetInteger("Direction", curr);
 	}
@@ -89,7 +89,6 @@ public class Player: MonoBehaviour
 	void Update() 
 	{
 		if(isDebug){
-			animator.StopPlayback ();
 			if (Input.GetKeyDown (KeyCode.LeftArrow)) 
 			{
 				StartCoroutine("leftFade");

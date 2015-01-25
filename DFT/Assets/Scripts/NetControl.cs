@@ -155,10 +155,10 @@ public class NetControl : MonoBehaviour {
 		Timer.text = "Days left: " + timeLeft;
 		if(client.Available > 0)
 			ReadData();
-		if(Input.GetButtonDown("VoteUp")){sendMessage("U"); arrows.Select(0); animator.SetInteger("Direction", 2);}
-		else if(Input.GetButtonDown("VoteDown")){sendMessage("D"); arrows.Select(1); animator.SetInteger("Direction", 0);}
-		else if(Input.GetButtonDown("VoteLeft")){sendMessage("L"); arrows.Select(2); animator.SetInteger("Direction", 1);}
-		else if(Input.GetButtonDown("VoteRight")){sendMessage("R"); arrows.Select(3); animator.SetInteger("Direction", 3);}
+		if(Input.GetButtonDown("VoteUp")){sendMessage("U"); arrows.Select(0); player.MoveSprite(0);}
+		else if(Input.GetButtonDown("VoteDown")){sendMessage("D"); arrows.Select(1); player.MoveSprite(1);}
+		else if(Input.GetButtonDown("VoteLeft")){sendMessage("L"); arrows.Select(2); player.MoveSprite(2);}
+		else if(Input.GetButtonDown("VoteRight")){sendMessage("R"); arrows.Select(3); player.MoveSprite(3);}
 	}
 	
 	void StatusUpdate()
