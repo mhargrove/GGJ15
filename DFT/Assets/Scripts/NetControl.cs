@@ -16,6 +16,7 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private ProgressBar hungerBar;
 	[SerializeField] private ProgressBar romanceBar;
 	[SerializeField] private ProgressBar studyBar;
+	[SerializeField] private ArrowSelection arrows;
 	[SerializeField] private string connectionIP = "167.96.64.74";
 	[SerializeField] private int connectionPort = 8000;
 	
@@ -119,10 +120,10 @@ public class NetControl : MonoBehaviour {
 	{
 		if(client.Available > 0)
 			ReadData();
-		if(Input.GetButtonDown("VoteUp")){sendMessage("U");}
-		else if(Input.GetButtonDown("VoteDown")){sendMessage("D");}
-		else if(Input.GetButtonDown("VoteLeft")){sendMessage("L");}
-		else if(Input.GetButtonDown("VoteRight")){sendMessage("R");}
+		if(Input.GetButtonDown("VoteUp")){sendMessage("U"); arrows.Select(0);}
+		else if(Input.GetButtonDown("VoteDown")){sendMessage("D"); arrows.Select(1);}
+		else if(Input.GetButtonDown("VoteLeft")){sendMessage("L"); arrows.Select(2);}
+		else if(Input.GetButtonDown("VoteRight")){sendMessage("R"); arrows.Select(3);}
 	}
 	
 	void StatusUpdate()
