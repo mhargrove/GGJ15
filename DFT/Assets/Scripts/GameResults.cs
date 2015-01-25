@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameResults : MonoBehaviour {
-
+public class GameResults : MonoBehaviour{
 	public int health;
 	public int sleepy;
 	public int social;
