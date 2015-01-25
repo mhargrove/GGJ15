@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameResults{
+public class GameResults : MonoBehaviour {
 
 	public int health;
 	public int sleepy;
@@ -12,7 +12,7 @@ public class GameResults{
 	public int cash;
 
 
-	public GameResults(int hea, int sle, int soc, int hun, int rom, int stu, int cash){
+	public void setGameResults(int hea, int sle, int soc, int hun, int rom, int stu, int cash){
 		this.health = hea;
 		this.sleepy = sle;
 		this.social = soc;
@@ -21,4 +21,5 @@ public class GameResults{
 		this.study = stu;
 		this.cash = cash;
 	}
+
 }
