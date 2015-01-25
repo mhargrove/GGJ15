@@ -12,7 +12,6 @@ public class Player: MonoBehaviour
 	void Start ()
 	{
 		animator = this.GetComponent<Animator>();
-		animator.StopPlayback ();
 	}
 
 	IEnumerator leftFade() {
