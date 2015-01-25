@@ -29,8 +29,8 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private GameObject book;
 	[SerializeField] private string connectionIP = "167.96.64.74";
 	[SerializeField] private int connectionPort = 8000;
-	
-	
+	[SerializeField] private Animator animator;
+
 	private readonly float tileSize = 0.32f;
 	private TcpClient client;
 	private NetworkStream toServer;
@@ -45,6 +45,7 @@ public class NetControl : MonoBehaviour {
 	
 	void Start()
 	{
+		animator = this.GetComponent<Animator>();
 		try{
 			//net varibles
 			client = new TcpClient ();
@@ -139,10 +140,10 @@ public class NetControl : MonoBehaviour {
 		Timer.text = "Days left: " + timeLeft;
 		if(client.Available > 0)
 			ReadData();
-		if(Input.GetButtonDown("VoteUp")){sendMessage("U"); arrows.Select(0);}
-		else if(Input.GetButtonDown("VoteDown")){sendMessage("D"); arrows.Select(1);}
-		else if(Input.GetButtonDown("VoteLeft")){sendMessage("L"); arrows.Select(2);}
-		else if(Input.GetButtonDown("VoteRight")){sendMessage("R"); arrows.Select(3);}
+		if(Input.GetButtonDown("VoteUp")){sendMessage("U"); arrows.Select(0); animator.SetInteger("Direction", 2);}
+		else if(Input.GetButtonDown("VoteDown")){sendMessage("D"); arrows.Select(1); animator.SetInteger("Direction", 0);}
+		else if(Input.GetButtonDown("VoteLeft")){sendMessage("L"); arrows.Select(2); animator.SetInteger("Direction", 1);}
+		else if(Input.GetButtonDown("VoteRight")){sendMessage("R"); arrows.Select(3); animator.SetInteger("Direction", 3);}
 	}
 	
 	void StatusUpdate()
