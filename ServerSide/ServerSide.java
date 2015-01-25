@@ -186,15 +186,16 @@ public class ServerSide{
 			" items count: "+items.size() + " time left: " + formatTimeRemaining());
 	}
 
-	public static void endGame(){
+	public static void endGame(boolean winner){
 		//TODO send endgame signal
 		updateUsers();
 		for(Socket user : socketWhisperer.clients){
-			updateUser(user, "ENDGAME");
+			if(winner) updateUser(user, "WINGAME");
+			else updateUser(user, "LOSEGAME");
 		}
-		System.out.println("\nGame over. Reseting in 3 seconds.");
+		System.out.println("\nGame over. Reseting in 18 seconds.");
 		try{
-			Thread.sleep(3000);
+			Thread.sleep(18000);
 		}
 		catch(InterruptedException ie){
 			//whateva
@@ -255,7 +256,7 @@ public class ServerSide{
 
 		//Check for trigger conditions
 		if(stats.health <= 0){
-			endGame(); //dead. Terrible ending.
+			endGame(false); //dead. Terrible ending.
 		}
 		if(stats.sleepy <= 0){
 			//pass out and wind up in hospital
@@ -273,7 +274,12 @@ public class ServerSide{
 
 		//end game
 		if(getTimeElapsed() > TOTALGAMETIME){
-			endGame();
+			if(stats.study > 60){
+				endGame(true);
+			}
+			else{
+				endGame(false);
+			}
 		}
 	}
 
