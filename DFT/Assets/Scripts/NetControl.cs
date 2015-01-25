@@ -62,7 +62,12 @@ public class NetControl : MonoBehaviour {
 		try{
 			//net varibles
 			client = new TcpClient ();
-			client.Connect(connectionIP, connectionPort);
+			try{
+				client.Connect(connectionIP, connectionPort);}
+			catch(SocketException e)
+			{
+				Application.LoadLevel(0);
+			}
 			toServer = client.GetStream();
 			sendMessage("S");
 			netRecvBuffer = new byte[1];
