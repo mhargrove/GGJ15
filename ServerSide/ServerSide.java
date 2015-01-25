@@ -140,7 +140,9 @@ public class ServerSide{
 			printCollisionMap(collisionMap);
 
 			//spawn static items
-			items.add(new Item(ItemTypes.BED, 21, -31));
+			items.add(new Item(ItemTypes.BED, 20, -32));
+			items.add(new Item(ItemTypes.BOOKS, 0,0));
+			items.add(new Item(ItemTypes.FOOD, 20, -31));
 		}
 		catch(IOException ioe){
 			ioe.printStackTrace();
@@ -250,7 +252,15 @@ public class ServerSide{
 		}
 		for(Socket s : socketWhisperer.clients){
 			if(!connectionOpen(s)){
-				socketWhisperer.clients.remove(s);
+				try{
+					s.close();
+				}
+				catch(IOException ioe){
+					//Do nothing
+				}
+				finally{
+					socketWhisperer.clients.remove(s);
+				}	
 			} 
 		}
 	}
