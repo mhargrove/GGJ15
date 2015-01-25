@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Net;
 using System.Net.Sockets;
@@ -16,6 +17,7 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private ProgressBar hungerBar;
 	[SerializeField] private ProgressBar romanceBar;
 	[SerializeField] private ProgressBar studyBar;
+	[SerializeField] private Text Timer;
 	[SerializeField] private ArrowSelection arrows;
 	[SerializeField] private GameObject bed;
 	[SerializeField] private GameObject flower;
@@ -36,7 +38,8 @@ public class NetControl : MonoBehaviour {
 	private byte[] netRecvBuffer;
 	
 	private Vector2 tilePos = new Vector2(0, 0);
-	private int playerX, playerY, daysLeft, health, sleepy, social, food, romance, study;
+	private int playerX, playerY, health, sleepy, social, food, romance, study;
+	private string timeLeft = "";
 	private string[] itemNames;
 	private float[] itemX, itemY;
 	
@@ -95,7 +98,7 @@ public class NetControl : MonoBehaviour {
 			string[] data = msg.Split ('|');
 			playerX = int.Parse (data[0]);
 			playerY = int.Parse (data [1]);
-			daysLeft = int.Parse (data [2]);
+			timeLeft = data[2];
 			health = int.Parse (data [3]);
 			sleepy = int.Parse (data [4]);
 			social = int.Parse (data [5]);
@@ -133,6 +136,7 @@ public class NetControl : MonoBehaviour {
 	
 	void Update ()
 	{
+		Timer.text = "Days left: " + timeLeft;
 		if(client.Available > 0)
 			ReadData();
 		if(Input.GetButtonDown("VoteUp")){sendMessage("U"); arrows.Select(0);}
