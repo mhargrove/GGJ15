@@ -9,7 +9,8 @@ using System.Net.Sockets;
 // -------ALWAYS SENT----------------------------------------------------------------- ___MAY BE 0 OR MANY ITEMS___________________
 
 public class NetControl : MonoBehaviour {
-	
+
+	//players and status bars
 	[SerializeField] private Player player;
 	[SerializeField] private ProgressBar healthBar;
 	[SerializeField] private ProgressBar sleepBar;
@@ -20,6 +21,8 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private Text money;
 	[SerializeField] private Text Timer;
 	[SerializeField] private ArrowSelection arrows;
+
+	//prefabs
 	[SerializeField] private GameObject bed;
 	[SerializeField] private GameObject flower;
 	[SerializeField] private GameObject medkit;
@@ -28,6 +31,8 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private GameObject foodItem;
 	[SerializeField] private GameObject coin;
 	[SerializeField] private GameObject book;
+
+	//other
 	[SerializeField] private string connectionIP = "167.96.64.74";
 	[SerializeField] private int connectionPort = 8000;
 	[SerializeField] private Animator animator;
@@ -47,6 +52,12 @@ public class NetControl : MonoBehaviour {
 	
 	void Start()
 	{
+		//figure out if the canvas from last scene persists
+		GameObject lastScene = GameObject.Find ("Canvas");
+		if (lastScene != null) {
+			Debug.Log("Got IP field.");
+			lastScene.SetActive(false);
+		}
 		animator = this.GetComponent<Animator>();
 		try{
 			//net varibles
@@ -67,7 +78,7 @@ public class NetControl : MonoBehaviour {
 		}
 		catch(SocketException se){
 			Debug.LogError(se.Message);
-			Debug.Log ("No socket...");
+			Debug.Log ("No socket on address " + connectionIP);
 		}
 		if (client.Connected) {
 			Debug.Log ("Connected");

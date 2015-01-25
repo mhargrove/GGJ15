@@ -7,9 +7,4 @@ public class InputIP : MonoBehaviour {
 	void Start () {
 		Object.DontDestroyOnLoad (this);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
