@@ -9,18 +9,19 @@ public class LoadGame : MonoBehaviour {
 
 	void Start ()
 	{
-		if (Application.loadedLevel == 0 || Application.loadedLevel == 4) 
-		{StartCoroutine("Load");
-				}
-		else
+//		if (Application.loadedLevel == 0 || Application.loadedLevel == 4) 
+//		{StartCoroutine("Load");
+//				}
+//		else
+		if (Application.loadedLevel == 2 || Application.loadedLevel == 3)
 			StartCoroutine("LoadResults");
 	}
 
-	IEnumerator Load()
-	{
-		yield return new WaitForSeconds(8);
-		Application.LoadLevel(1);
-		}
+//	IEnumerator Load()
+//	{
+//		yield return new WaitForSeconds(8);
+//		Application.LoadLevel(1);
+//		}
 
 	IEnumerator LoadResults()
 	{

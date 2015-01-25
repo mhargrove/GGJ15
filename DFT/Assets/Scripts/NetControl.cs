@@ -33,7 +33,7 @@ public class NetControl : MonoBehaviour {
 	[SerializeField] private GameObject book;
 
 	//other
-	[SerializeField] private string connectionIP = "167.96.64.74";
+	[SerializeField] private string connectionIP = "0.0.0.0";
 	[SerializeField] private int connectionPort = 8000;
 	[SerializeField] private Animator animator;
 	[SerializeField] private GameObject results;
@@ -57,6 +57,7 @@ public class NetControl : MonoBehaviour {
 		if (lastScene != null) {
 			Debug.Log("Got IP field.");
 			lastScene.SetActive(false);
+			connectionIP = lastScene.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(1).GetComponent<Text>().text;
 		}
 		animator = this.GetComponent<Animator>();
 		try{
