@@ -30,7 +30,6 @@ public class NetControl : MonoBehaviour {
 	
 	
 	private readonly float tileSize = 0.32f;
-	private float lasttime      = 0;
 	private TcpClient client;
 	private NetworkStream toServer;
 	private GameObject[] items;
@@ -61,6 +60,7 @@ public class NetControl : MonoBehaviour {
 			studyBar   = (ProgressBar)GameObject.Find("StudyBar").GetComponent("ProgressBar");
 		}
 		catch(SocketException se){
+			Debug.LogError(se.Message);
 			Debug.Log ("No socket...");
 		}
 		if (client.Connected) {
@@ -90,8 +90,9 @@ public class NetControl : MonoBehaviour {
 	
 	private void handleMessage(string msg){
 		if (msg.Length != 2) {
-			//arrows.Reset();
-			string[] data = msg.Split ('|');//--------------------------------------------------------------------------
+			arrows.Reset();
+			//Handle the message
+			string[] data = msg.Split ('|');
 			playerX = int.Parse (data[0]);
 			playerY = int.Parse (data [1]);
 			daysLeft = int.Parse (data [2]);
@@ -101,21 +102,25 @@ public class NetControl : MonoBehaviour {
 			food = int.Parse (data [6]);
 			romance = int.Parse (data [7]);
 			study = int.Parse (data [8]);
+
+			//From here, it's the optional items
 			int count = (data.Length - 9) / 3;
 			itemNames = new string[count];
 			itemX = new float[count];
 			itemY = new float[count];
 			if(count > 0){
-				for(int i = 9, j = 0; i < 9 + count - 3; i+=3) {
+				for(int i = 9, j = 0; i < data.Length - 3; i+=3, j++) {
 					itemNames [j] = data [i];
-					itemX [j] = float.Parse (data [i + 1]);
-					itemY [j++] = float.Parse (data [i + 2]);
+					itemX [j] = int.Parse (data [i + 1]);
+					itemY [j] = int.Parse (data [i + 2]);
 				}
+			}
+			else{
+				Debug.Log("Not items");
 			}
 			StatusUpdate ();
 		} else {
 			sendMessage("V");
-			Debug.Log("Sent keep alive response");
 		}
 	}
 	
@@ -156,7 +161,6 @@ public class NetControl : MonoBehaviour {
 				player.moveDown();
 				tilePos.y--;
 			}
-			
 			else if ((int)playerX > tilePos.x) {
 				player.moveRight();
 				tilePos.x++;
@@ -195,36 +199,41 @@ public class NetControl : MonoBehaviour {
 			studyBar.UpdateHealth (study);
 
 
-		for (int i = 0; i < items.Length; i++)
-			Destroy (items [i]);
+		//Destroy all items previous to these ones
+		for (int i = 0; i < items.Length; i++) Destroy (items [i]);
+
 		items = new GameObject[itemNames.Length];
-		for (int i = 0; i < items.Length; i++)
+		for (int i = 0; i < itemNames.Length; i++)
 		{
+			Vector3 pos = new Vector3(itemX[i] * tileSize, itemY[i] * tileSize, 0);
 			switch (itemNames[i])
 			{
 			case "BED":
-				items[i] = Instantiate(bed, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
+				items[i] = Instantiate(bed, pos, Quaternion.identity) as GameObject;
 				break;
 			case "FLOWER":
-				items[i] = Instantiate(flower, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
+				items[i] = Instantiate(flower, pos, Quaternion.identity) as GameObject;
 				break;
 			case "MEDKIT":
-				items [i] = Instantiate(medkit, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
+				items [i] = Instantiate(medkit, pos, Quaternion.identity) as GameObject;
 				break;
 			case "NYQUIL":
-				items[i] = Instantiate(nyquil, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
+				items[i] = Instantiate(nyquil, pos, Quaternion.identity) as GameObject;
 				break;
-			case "ADDERALL":
-				items[i] = Instantiate(adderall, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
+			case "ADDERAL":
+				items[i] = Instantiate(adderall, pos, Quaternion.identity) as GameObject;
 				break;
 			case "FOOD":
-				items[i] = Instantiate(foodItem, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
+				items[i] = Instantiate(foodItem, pos, Quaternion.identity) as GameObject;
 				break;
 			case "COIN":
-				items[i] = Instantiate(coin, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
+				items[i] = Instantiate(coin, pos, Quaternion.identity) as GameObject;
+				break;
+			case "BOOKS":
+				items[i] = Instantiate(book, pos, Quaternion.identity) as GameObject;
 				break;
 			default: //BOOK
-				items[i] = Instantiate(book, new Vector3(itemX[i], itemY[i], 0), Quaternion.identity) as GameObject;
+				Debug.LogError("Invalid item: " + itemNames[i]);
 				break;
 			}
 		}

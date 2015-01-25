@@ -1,32 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Player.cs">
-    <Files>
-      <File FileName="Assets/Scripts/Player.cs" Line="84" Column="80" />
-      <File FileName="Assets/Scripts/NetControl.cs" Line="126" Column="3" />
-      <File FileName="Assets/Scripts/ArrowSelection.cs" Line="7" Column="26" />
-<<<<<<< HEAD
-=======
-=======
-<<<<<<< HEAD
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\NetControl.cs">
     <Files>
-<<<<<<< HEAD
-      <File FileName="Assets\Scripts\NetControl.cs" Line="206" Column="31" />
-=======
-      <File FileName="Assets\Scripts\NetControl.cs" Line="80" Column="20" />
-=======
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/NetControl.cs">
-    <Files>
-      <File FileName="Assets/Scripts/Player.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/ArrowSelection.cs" Line="14" Column="16" />
-      <File FileName="Assets/Scripts/NetControl.cs" Line="27" Column="43" />
->>>>>>> 27ae69dd0d11d72366b8e28c98cd18872407bc31
->>>>>>> b8b2cf800225fd33dc6b081dfd865ba0f858d5a1
->>>>>>> 3c9b2d10e495a11fe0e7e4ac8514d1c560904791
->>>>>>> fb8e5dec1fa477e63c08c99771e47cd104cd9aa1
+      <File FileName="Assets\Scripts\NetControl.cs" Line="32" Column="40" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
